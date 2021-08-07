@@ -1,0 +1,92 @@
+[
+  {
+    "id": 0,
+    "first_name": "A",
+    "thumb": "contact/2.jpg",
+    "status": "8",
+    "mesg": "Typing................",
+    "lastSeenDate": "30/11/19",
+    "onlineStatus": "online",
+    "typing": true
+  },
+  {
+    "id": 1,
+    "first_name": "B",
+    "thumb": "contact/1.jpg",
+    "status": "Seen",
+    "mesg": "Hi, i am josephin. How are you.. ! There are many variations of passages.",
+    "lastSeenDate": "22/10/19",
+    "onlineStatus": "online",
+    "typing": false
+  },
+  {
+    "id": 2,
+    "first_name": "C",
+    "thumb": "contact/3.jpg",
+    "status": "Sending",
+    "mesg": "I need job, please help me.",
+    "lastSeenDate": "15/06/19",
+    "onlineStatus": "unreachable",
+    "typing": false
+  },
+  {
+    "id": 3,
+    "first_name": "D",
+    "thumb": "contact/4.jpg",
+    "status": "Failed",
+    "mesg": "Hi, i am josephin. How are you.. ! There are many variations of passages.",
+    "lastSeenDate": "04/06/19",
+    "onlineStatus": "busy",
+    "typing": false
+  },
+  {
+    "id": 4,
+    "first_name": "E",
+    "thumb": "contact/2.jpg",
+    "status": "Failed",
+    "mesg": "Hi, i am josephin. How are you.. ! There are many variations of passages.",
+    "lastSeenDate": "04/06/19",
+    "onlineStatus": "busy",
+    "typing": false
+  },
+  {
+    "id": 5,
+    "first_name": "F",
+    "thumb": "contact/1.jpg",
+    "status": "Failed",
+    "mesg": "Hi, i am josephin. How are you.. ! There are many variations of passages.",
+    "lastSeenDate": "04/06/19",
+    "onlineStatus": "busy",
+    "typing": false
+  },
+  {
+    "id": 6,
+    "first_name": "G",
+    "thumb": "contact/1.jpg",
+    "status": "Failed",
+    "mesg": "Hi, i am josephin. How are you.. ! There are many variations of passages.",
+    "lastSeenDate": "04/06/19",
+    "onlineStatus": "busy",
+    "typing": false
+  },
+  {
+    "id": 7,
+    "first_name": "H",
+    "thumb": "contact/1.jpg",
+    "status": "Failed",
+    "mesg": "Hi, i am josephin. How are you.. ! There are many variations of passages.",
+    "lastSeenDate": "04/06/19",
+    "onlineStatus": "busy",
+    "typing": false
+  },
+  {
+    "id": 8,
+    "first_name": "I",
+    "thumb": "contact/1.jpg",
+    "status": "Failed",
+    "mesg": "Hi, i am josephin. How are you.. ! There are many variations of passages.",
+    "lastSeenDate": "04/06/19",
+    "onlineStatus": "busy",
+    "typing": false
+  }
+]

@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST = {__rewrites:[],"/404":["static\u002Fchunks\u002Fpages\u002F404.js"],"/_error":["static\u002Fchunks\u002Fpages\u002F_error.js"],"/messenger":["static\u002Fchunks\u002Fpages
