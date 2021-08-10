@@ -11,6 +11,10 @@ var actionTypes = _interopRequireWildcard(require("../actions/types"));
 
 var _redux = require("redux");
 
+var _reactAddonsUpdate = _interopRequireDefault(require("react-addons-update"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -43,7 +47,7 @@ var initialState = {
   componentUnmount: null,
   chatedUsers: [{
     id: 1,
-    first_name: "A",
+    first_name: "JACKILINE",
     status: "online",
     mesg: "how are you",
     lastSeenDate: "30/11/19",
@@ -51,28 +55,12 @@ var initialState = {
     lastMessageAt: "2021-08-07 09:03:10"
   }, {
     id: 2,
-    first_name: "B",
+    first_name: "BRONNNZE",
     status: "online",
     mesg: "how are you",
     lastSeenDate: "30/11/19",
     onlineStatus: "online",
     lastMessageAt: "2021-08-07 09:03:56"
-  }, {
-    id: 3,
-    first_name: "C",
-    status: "online",
-    mesg: "how are you",
-    lastSeenDate: "30/11/19",
-    onlineStatus: "online",
-    lastMessageAt: "2021-08-07 09:04:10"
-  }, {
-    id: 4,
-    first_name: "D",
-    status: "online",
-    mesg: "how are you",
-    lastSeenDate: "30/11/19",
-    onlineStatus: "online",
-    lastMessageAt: "2021-08-07 09:05:10"
   }]
 };
 
@@ -140,6 +128,15 @@ var user_reducer = function user_reducer() {
       return _objectSpread({}, state, {
         chatedUsers: state.chatedUsers.filter(function (user) {
           return user.id !== action.payload;
+        })
+      });
+
+    case actionTypes.LAST_MESSAGE_TIME:
+      return (0, _reactAddonsUpdate["default"])(state, {
+        chatedUsers: _defineProperty({}, action.payload.id, {
+          lastMessageAt: {
+            $set: action.payload.time
+          }
         })
       });
 

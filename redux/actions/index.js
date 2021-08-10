@@ -62,6 +62,14 @@ export const removeRecentUser = (id) => ({
   payload: id,
 });
 
+export const updateLastMessageTime = (payload) => ({
+  type: actionTypes.LAST_MESSAGE_TIME,
+  payload: {
+    id: payload.id,
+    time: payload.time,
+  },
+});
+
 export const fetchUsers = () => {
   try {
     return async (dispatch) => {

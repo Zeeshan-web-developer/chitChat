@@ -1,5 +1,6 @@
 import * as actionTypes from "../actions/types";
 import { combineReducers } from "redux";
+import update from "react-addons-update";
 const initialState = {
   currentUser: null,
   accountId: null,
@@ -15,7 +16,7 @@ const initialState = {
   chatedUsers: [
     {
       id: 1,
-      first_name: "A",
+      first_name: "JACKILINE",
       status: "online",
       mesg: "how are you",
       lastSeenDate: "30/11/19",
@@ -24,30 +25,12 @@ const initialState = {
     },
     {
       id: 2,
-      first_name: "B",
+      first_name: "BRONNNZE",
       status: "online",
       mesg: "how are you",
       lastSeenDate: "30/11/19",
       onlineStatus: "online",
       lastMessageAt: "2021-08-07 09:03:56",
-    },
-    {
-      id: 3,
-      first_name: "C",
-      status: "online",
-      mesg: "how are you",
-      lastSeenDate: "30/11/19",
-      onlineStatus: "online",
-      lastMessageAt: "2021-08-07 09:04:10",
-    },
-    {
-      id: 4,
-      first_name: "D",
-      status: "online",
-      mesg: "how are you",
-      lastSeenDate: "30/11/19",
-      onlineStatus: "online",
-      lastMessageAt: "2021-08-07 09:05:10",
     },
   ],
 };
@@ -120,6 +103,15 @@ const user_reducer = (state = initialState, action) => {
           (user) => user.id !== action.payload
         ),
       };
+
+    case actionTypes.LAST_MESSAGE_TIME:
+      return update(state, {
+        chatedUsers: {
+          [action.payload.id]: {
+            lastMessageAt: { $set: action.payload.time },
+          },
+        },
+      });
     default: {
       return state;
     }

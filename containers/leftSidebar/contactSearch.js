@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useContext } from "react";
 import { FormGroup, Input } from "reactstrap";
-import dateTime from "date-time";
+import dateTime from "./datetime";
 import { Nav, TabContent } from "reactstrap";
 
 import {
@@ -12,6 +12,7 @@ import {
   chatededUsers,
   addNewUSer,
   removeRecentUser,
+  updateLastMessageTime,
 } from "../../redux/actions/index";
 
 function form() {
@@ -29,13 +30,24 @@ function form() {
 
   const addNew = (item, e) => {
     let found = false;
-
+    let foundID;
+    /* SEARCH CONTACT IN CHAT TAB  RETURN:TRUE IF PRESENT,RETURN FALSE IF NOT PRESENT */
     for (var i = 0; i < recentUsers.length; i++) {
       if (recentUsers[i].id === item.id) {
         found = true;
+        foundID = recentUsers[i].id;
         break;
       }
     }
+
+    /* if contact is present append messages */
+    if (found) {
+      console.log("found", foundID);
+      let objIndex = recentUsers.findIndex((obj) => obj.id == foundID);
+      console.log("objIndex", objIndex);
+      dispatch(updateLastMessageTime({ id: objIndex, time: dateTime() }));
+    }
+    /* If not present in chat section.if any other is present without mesg attribute remove first then add*/
     if (!found) {
       recentUsers.map((ci) => {
         if (!ci.hasOwnProperty("mesg")) {
@@ -46,8 +58,8 @@ function form() {
         addNewUSer({
           id: item.id,
           first_name: item.first_name,
-          lastMessageAt: "2021-08-07 10:18:32",
-          mesg: "hii",
+          lastMessageAt: dateTime(),
+          mesg: `msg at ${dateTime()}`,
         })
       );
     }

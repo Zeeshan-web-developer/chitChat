@@ -1,18 +1,10 @@
 import React, { useEffect } from "react";
-import { useContext } from "react";
 import { Nav, TabContent } from "reactstrap";
-import {
-  setChatWith,
-  unmountComponent,
-  removeRecentUser,
-} from "../../redux/actions/index";
-import ChatContext from "../../helpers/chatContext";
+import { setChatWith, removeRecentUser } from "../../redux/actions/index";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "./1.jpg";
 function chatedUsers() {
   const dispatch = useDispatch();
-  // const chatCtx = useContext(ChatContext);
-  // const chatMembers = chatCtx.chatMembers;
   const unmount = useSelector((state) => state.user.componentUnmount);
   const recentUSers = useSelector((state) => state.user.chatedUsers);
 

@@ -70,8 +70,9 @@ const Auth_SignIn = (props) => {
     }
   };
   const doConnection = (_username) => {
+    console.log("do connection");
     let client = chatClient(_username, credential.password);
-
+    console.log("do connection", client);
     client.on("auth:success", (msg) => {
       console.log("auth success", msg);
       dispatch(setClient(client));

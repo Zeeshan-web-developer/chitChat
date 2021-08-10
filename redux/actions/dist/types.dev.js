@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.REMOVE_USER = exports.ADD_NEW_USER = exports.CHAT_COMPONENT_UNMOUNT = exports.SET_CHATED_USERS = exports.SET_CHAT_WITH = exports.SET_USERS = exports.SET_ACTIVE_TAB = exports.ON_LOGOUT = exports.LOGIN_LODING = exports.LOGIN_ERROR = exports.SET_CLIENT = exports.SET_USER_STATUS = exports.SET_USER = void 0;
+exports.LAST_MESSAGE_TIME = exports.REMOVE_USER = exports.ADD_NEW_USER = exports.CHAT_COMPONENT_UNMOUNT = exports.SET_CHATED_USERS = exports.SET_CHAT_WITH = exports.SET_USERS = exports.SET_ACTIVE_TAB = exports.ON_LOGOUT = exports.LOGIN_LODING = exports.LOGIN_ERROR = exports.SET_CLIENT = exports.SET_USER_STATUS = exports.SET_USER = void 0;
 var SET_USER = "SET_USER";
 exports.SET_USER = SET_USER;
 var SET_USER_STATUS = "SET_USER_STATUS";
@@ -30,3 +30,5 @@ var ADD_NEW_USER = "ADD_NEW_USER";
 exports.ADD_NEW_USER = ADD_NEW_USER;
 var REMOVE_USER = "REMOVE_USER";
 exports.REMOVE_USER = REMOVE_USER;
+var LAST_MESSAGE_TIME = "LAST_MESSAGE_TIME";
+exports.LAST_MESSAGE_TIME = LAST_MESSAGE_TIME;

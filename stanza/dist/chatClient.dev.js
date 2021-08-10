@@ -25,10 +25,11 @@ function chatClient(username, password) {
       bosh: "false"
     },
     rosterVer: "ver14"
-  }); //client.on("*", console.log);
-
+  });
+  client.on("*", console.log);
   client.on("session:started", function () {
-    client.subscribe("sumanth@mongoose.mysmartpbx.org");
+    // client.subscribe("sumanth@mongoose.mysmartpbx.org");
+    console.log("session started");
     getContacts();
     client.sendPresence();
   });

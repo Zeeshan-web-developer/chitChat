@@ -5,7 +5,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchUsers = exports.removeRecentUser = exports.addNewUSer = exports.unmountComponent = exports.chatededUsers = exports.setChatWith = exports.setActiveTab = exports.logout = exports.loginLoding = exports.setLoginError = exports.setClient = exports.setUSerStatus = exports.setUser = void 0;
+exports.fetchUsers = exports.updateLastMessageTime = exports.removeRecentUser = exports.addNewUSer = exports.unmountComponent = exports.chatededUsers = exports.setChatWith = exports.setActiveTab = exports.logout = exports.loginLoding = exports.setLoginError = exports.setClient = exports.setUSerStatus = exports.setUser = void 0;
 
 var actionTypes = _interopRequireWildcard(require("./types"));
 
@@ -130,6 +130,18 @@ var removeRecentUser = function removeRecentUser(id) {
 };
 
 exports.removeRecentUser = removeRecentUser;
+
+var updateLastMessageTime = function updateLastMessageTime(payload) {
+  return {
+    type: actionTypes.LAST_MESSAGE_TIME,
+    payload: {
+      id: payload.id,
+      time: payload.time
+    }
+  };
+};
+
+exports.updateLastMessageTime = updateLastMessageTime;
 
 var fetchUsers = function fetchUsers() {
   try {

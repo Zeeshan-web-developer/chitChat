@@ -11,9 +11,10 @@ export default function chatClient(username, password) {
     },
     rosterVer: "ver14",
   });
-  //client.on("*", console.log);
+  client.on("*", console.log);
   client.on("session:started", () => {
-    client.subscribe("sumanth@mongoose.mysmartpbx.org");
+    // client.subscribe("sumanth@mongoose.mysmartpbx.org");
+    console.log("session started");
     getContacts();
     client.sendPresence();
   });
