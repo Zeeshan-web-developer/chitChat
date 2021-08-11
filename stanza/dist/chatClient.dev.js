@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = chatClient;
-exports.getContacts = void 0;
 
 var XMPP = _interopRequireWildcard(require("stanza"));
 
@@ -25,39 +24,18 @@ function chatClient(username, password) {
       bosh: "false"
     },
     rosterVer: "ver14"
-  });
-  client.on("*", console.log);
+  }); // client.on("*", console.log);
+
   client.on("session:started", function () {
     // client.subscribe("sumanth@mongoose.mysmartpbx.org");
     console.log("session started");
-    getContacts();
     client.sendPresence();
   });
   client.on("auth:failed", function () {
     console.log("xmpp authentication failed");
   });
+  client.on("subscribe", function (ReceivedPresence) {
+    return client.acceptSubscription(ReceivedPresence.from);
+  });
   return client;
 }
-
-var getContacts = function getContacts() {
-  var contacts;
-  return regeneratorRuntime.async(function getContacts$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.next = 2;
-          return regeneratorRuntime.awrap(client.getRoster());
-
-        case 2:
-          contacts = _context.sent;
-          console.log("all contacts ", contacts.items);
-
-        case 4:
-        case "end":
-          return _context.stop();
-      }
-    }
-  });
-};
-
-exports.getContacts = getContacts;

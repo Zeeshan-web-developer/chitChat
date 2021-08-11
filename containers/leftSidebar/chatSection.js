@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContactSearch from "./contactSearch";
 import ChatedUsers from "./chatedUsers";
 import { useDispatch, useSelector } from "react-redux";

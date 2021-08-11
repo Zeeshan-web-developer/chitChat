@@ -56,10 +56,10 @@ const Auth_SignIn = (props) => {
       });
 
       if (res.status === 201) {
-        const _username = res.data.data.owner_id + "@" + DOMAIN;
+        const jid = res.data.data.owner_id + "@" + DOMAIN;
+        const account_id = res.data.data.account_id;
         AuthToken = res.data.auth_token;
-        console.log("auth", AuthToken);
-        doConnection(_username);
+        doConnection(account_id, jid);
       } else {
         console.log("username or password or accountName wrong");
       }
@@ -69,14 +69,18 @@ const Auth_SignIn = (props) => {
       dispatch(loginLoding(false));
     }
   };
-  const doConnection = (_username) => {
-    console.log("do connection");
-    let client = chatClient(_username, credential.password);
-    console.log("do connection", client);
+  const doConnection = (account_id, jid) => {
+    let client = chatClient(jid, credential.password);
     client.on("auth:success", (msg) => {
-      console.log("auth success", msg);
       dispatch(setClient(client));
-      dispatch(setUser(credential.username));
+      dispatch(
+        setUser({
+          username: credential.username,
+          accountId: account_id,
+          jid: jid,
+        })
+      );
+
       const { username, password } = credential;
       const cookies = new Cookies();
       let d = new Date();

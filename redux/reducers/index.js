@@ -2,7 +2,7 @@ import * as actionTypes from "../actions/types";
 import { combineReducers } from "redux";
 import update from "react-addons-update";
 const initialState = {
-  currentUser: null,
+  currentUser: { username: null, accountId: null, jid: null },
   accountId: null,
   userStatus: "unavailable",
   client: null,

@@ -11,21 +11,18 @@ export default function chatClient(username, password) {
     },
     rosterVer: "ver14",
   });
-  client.on("*", console.log);
+  // client.on("*", console.log);
   client.on("session:started", () => {
     // client.subscribe("sumanth@mongoose.mysmartpbx.org");
     console.log("session started");
-    getContacts();
     client.sendPresence();
   });
 
   client.on("auth:failed", () => {
     console.log("xmpp authentication failed");
   });
+  client.on("subscribe", (ReceivedPresence) =>
+    client.acceptSubscription(ReceivedPresence.from)
+  );
   return client;
 }
-
-export const getContacts = async () => {
-  const contacts = await client.getRoster();
-  console.log("all contacts ", contacts.items);
-};

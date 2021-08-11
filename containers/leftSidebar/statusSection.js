@@ -2,7 +2,7 @@ import { X } from "react-feather";
 import { useSelector } from "react-redux";
 const StatusSection = (props) => {
   const status = useSelector((state) => state.user.userStatus);
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector((state) => state.user.currentUser.username);
   var text = currentUser;
   var loggedInUser = currentUser && text.split("@")[0];
   const closeLeftSide = () => {

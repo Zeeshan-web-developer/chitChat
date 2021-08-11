@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { FormGroup, Input } from "reactstrap";
 import dateTime from "./datetime";
 import { Nav, TabContent } from "reactstrap";
-
+import { getRosterItems } from "../../stanza/chatClient";
 import {
   fetchUsers,
   setChatWith,
@@ -17,13 +17,17 @@ import {
 
 function form() {
   const dispatch = useDispatch();
-  const accountId = useSelector((state) => state.user.accountId);
+  const jid = useSelector((state) => state.user.currentUser.jid);
+  var jidLoggedInUser = jid && jid.split("@")[0];
   const usersP = useSelector((state) => state.user.users);
+  const filteredUsers =
+    usersP.length > 0 &&
+    usersP[0].filter((user) => user.id !== jidLoggedInUser);
   const recentUsers = useSelector((state) => state.user.chatedUsers);
   const [searchTerm, setSearch] = useState(null);
-
   const [chatSubTab, setChatSubTab] = useState("contacts");
-
+  const client = useSelector((state) => state.user.client);
+  const [roster, setRoster] = useState([]);
   useEffect(() => {
     dispatch(fetchUsers());
   }, []);
@@ -42,9 +46,7 @@ function form() {
 
     /* if contact is present append messages */
     if (found) {
-      console.log("found", foundID);
       let objIndex = recentUsers.findIndex((obj) => obj.id == foundID);
-      console.log("objIndex", objIndex);
       dispatch(updateLastMessageTime({ id: objIndex, time: dateTime() }));
     }
     /* If not present in chat section.if any other is present without mesg attribute remove first then add*/
@@ -73,6 +75,30 @@ function form() {
     document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
   };
 
+  const addToRoster = async (item) => {
+    try {
+      let contacts = await client.getRoster();
+      let jidd = item.id + "@mongoose.mysmartpbx.org";
+      console.log("roster", contacts.items);
+
+      client.updateRosterItem({
+        jid: jidd,
+        name: item.first_name,
+        groups: [],
+      });
+      client.subscribe(jidd, () => console.log("subscrption request sent"));
+      acceptRequest();
+    } catch (e) {
+      console.log("error in sending friend  request", e);
+    }
+  };
+  const acceptRequest = () => {
+    console.log("listening");
+    client.on("subscribe", (ReceivedPresence) =>
+      client.acceptSubscription(ReceivedPresence.from)
+    );
+  };
+
   return (
     <form>
       <FormGroup>
@@ -88,8 +114,8 @@ function form() {
         <Nav tabs id="myTab1" role="tablist"></Nav>
         <TabContent activeTab={chatSubTab}>
           <ul className="chat-main">
-            {usersP.length > 0 &&
-              usersP[0]
+            {filteredUsers.length > 0 &&
+              filteredUsers
                 .filter((data) => {
                   if (searchTerm == null) {
                     return data;
@@ -112,6 +138,7 @@ function form() {
                         dispatch(setActiveTab("chat"));
                         dispatch(chatededUsers("new"));
                         addNew(chatlist, e);
+                        addToRoster(chatlist);
                       }}
                     >
                       <div className="chat-box">
