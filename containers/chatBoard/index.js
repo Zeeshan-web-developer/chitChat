@@ -10,13 +10,13 @@ const ChitChat = () => {
   const [timer, setTimer] = useState(new EasyTimer());
   const [timeValues, setTimeValues] = useState("");
 
-  useEffect(() => {
-    timer.start();
-    timer.addEventListener("secondsUpdated", tick);
-    return () => {
-      timer.removeEventListener("secondsUpdated", tick);
-    };
-  }, []);
+  // useEffect(() => {
+  //   timer.start();
+  //   timer.addEventListener("secondsUpdated", tick);
+  //   return () => {
+  //     timer.removeEventListener("secondsUpdated", tick);
+  //   };
+  // }, []);
 
   const tick = (e) => {
     const timeValue = timer.getTimeValues().toString();
@@ -24,11 +24,7 @@ const ChitChat = () => {
   };
   return (
     <div className="chitchat-main small-sidebar" id="content">
-      {currentTab === "chat" ? (
-        <Chat timeValues={timeValues} />
-      ) : (
-        <Chat timeValues={timeValues} />
-      )}
+      {currentTab === "chat" ? <Chat /> : <Chat />}
       {/* <Contact /> */}
     </div>
   );

@@ -23,7 +23,7 @@ import { Download, RotateCw } from "react-feather";
 import CustomChat from "./customChat";
 import MessageInput from "./messageInput";
 
-const Chat = (props) => {
+const Chat = () => {
   const [search, setSearch] = useState(false);
   const [toggleSmallSide, setToggleSmallSide] = useState(false);
   const [VolumOnOff, setVolumOnOff] = useState(false);
@@ -67,7 +67,7 @@ const Chat = (props) => {
         setQuickAction={setQuickAction}
         OpenAppSidebar={OpenAppSidebar}
         toggleSmallSide={toggleSmallSide}
-        timeValues={props.timeValues}
+        // timeValues={props.timeValues}
       />
       <div className="messages custom-scroll" id="blank">
         <div className="contact-details">
@@ -244,7 +244,7 @@ const Chat = (props) => {
                             <h5>Josephin water</h5>
                             <h6>America ,California</h6>
                           </div>
-                          <div id="basicUsage">{props.timeValues}</div>
+                          {/* <div id="basicUsage">{props.timeValues}</div> */}
                           <div className="zoomcontent">
                             <a
                               className="text-dark"
@@ -682,7 +682,7 @@ const Chat = (props) => {
                       </div>
                     </ModalBody>
                     <ModalFooter className="clfooter">
-                      <div id="basicUsage3">{props.timeValues}</div>
+                      {/* <div id="basicUsage3">{props.timeValues}</div> */}
                       <ul>
                         <li>
                           <a

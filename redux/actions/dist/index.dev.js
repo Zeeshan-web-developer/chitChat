@@ -5,7 +5,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchUsers = exports.updateLastMessageTime = exports.removeRecentUser = exports.addNewUSer = exports.unmountComponent = exports.chatededUsers = exports.setChatWith = exports.setActiveTab = exports.logout = exports.loginLoding = exports.setLoginError = exports.setClient = exports.setUSerStatus = exports.setUser = void 0;
+exports.fetchUsers = exports.setNewMessage = exports.setAllUsers = exports.updateUserStatus = exports.setRoster = exports.updateLastMessageTime = exports.removeRecentUser = exports.addNewUSer = exports.unmountComponent = exports.chatededUsers = exports.setChatWith = exports.setActiveTab = exports.logout = exports.loginLoding = exports.setLoginError = exports.setClient = exports.setUSerStatus = exports.setUser = void 0;
 
 var actionTypes = _interopRequireWildcard(require("./types"));
 
@@ -142,6 +142,45 @@ var updateLastMessageTime = function updateLastMessageTime(payload) {
 };
 
 exports.updateLastMessageTime = updateLastMessageTime;
+
+var setRoster = function setRoster(contacts) {
+  return {
+    type: actionTypes.SET_ROSTER,
+    payload: contacts
+  };
+};
+
+exports.setRoster = setRoster;
+
+var updateUserStatus = function updateUserStatus(payload) {
+  return {
+    type: actionTypes.UPDATE_USER_STATUS,
+    payload: {
+      id: payload.id,
+      onlineStatus: payload.onlineStatus
+    }
+  };
+};
+
+exports.updateUserStatus = updateUserStatus;
+
+var setAllUsers = function setAllUsers(payload) {
+  return {
+    type: actionTypes.SET_ALL_USERS,
+    payload: payload
+  };
+};
+
+exports.setAllUsers = setAllUsers;
+
+var setNewMessage = function setNewMessage(payload) {
+  return {
+    type: actionTypes.SET_NEW_MESSAGE,
+    payload: payload
+  };
+};
+
+exports.setNewMessage = setNewMessage;
 
 var fetchUsers = function fetchUsers() {
   try {

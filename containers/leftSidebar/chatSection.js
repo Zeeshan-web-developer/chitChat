@@ -8,10 +8,14 @@ import {
   setActiveTab,
   chatededUsers,
   fetchUsers,
+  setRoster,
 } from "../../redux/actions/index";
+import { getRosterItems } from "../../stanza/chatClient";
+
 const ChatSection = () => {
   const dispatch = useDispatch();
   const atab = useSelector((state) => state.user.activeTab);
+  const jid = useSelector((state) => state.user.currentUser.jid);
   const [activeTab, setActivetab] = useState("chat");
   const activeNav = useSelector((state) => state.user.newContact);
   const ToggleTab = (tab) => {
@@ -24,6 +28,10 @@ const ChatSection = () => {
       dispatch(setActiveTab("call"));
     }
   };
+  // useEffect(() => {
+  //   let rosterAray = getRosterItems();
+  //   dispatch(setRoster(rosterAray));
+  // }, []);
 
   return (
     <div className="chat custom-scroll">

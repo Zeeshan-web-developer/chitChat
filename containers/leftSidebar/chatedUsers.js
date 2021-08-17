@@ -54,7 +54,13 @@ function chatedUsers() {
                 key={i}
                 onClick={(e) => {
                   changeChatClick(e, chatlist);
-                  dispatch(setChatWith(chatlist.first_name));
+                  dispatch(
+                    setChatWith({
+                      name: chatlist.first_name,
+                      status: chatlist.onlineStatus,
+                      id: chatlist.id,
+                    })
+                  );
                   i > 0 ? checkHasMessages() : null;
                 }}
               >

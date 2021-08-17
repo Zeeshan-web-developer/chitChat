@@ -21,10 +21,12 @@ import {
 import ChatContext from "../../helpers/chatContext";
 import { Tooltip } from "react-tippy";
 import CustomizerContext from "../../helpers/customizerContext";
-import { unmountComponent } from "../../redux/actions/index";
+import { setOldMessages } from "../../redux/actions/index";
 const CustomChat = (props) => {
   const dispatch = useDispatch();
   const chatWith = useSelector((state) => state.user.chatWith);
+  const allmessages = useSelector((state) => state.user.allMessage);
+  console.log("allmessages");
   const [volum, setVolum] = useState(true);
   const [search, setSearch] = useState(false);
   const [audiocall, setAudiocall] = useState(false);
@@ -42,7 +44,6 @@ const CustomChat = (props) => {
   const selectedUser = chatCtx.selectedUser;
   const isTyeping = chatCtx.isTyeping;
   const typingMessage = chatCtx.typingMessage;
-  const random = "online";
   const selectedChat =
     chatMembers && chats && selectedUser
       ? chats.find(
@@ -100,11 +101,7 @@ const CustomChat = (props) => {
     }, 3000);
   }, [isTyeping]);
 
-  // useEffect(() => {
-  //   dispatch(unmountComponent(chatWith));
-  // }, [chatWith]);
-
-  return chatMembers && chats && chatWith ? (
+  return chatWith ? (
     <div className="messages custom-scroll active wallpapers" id="chating">
       <div className="contact-details">
         <div className="row">
@@ -127,24 +124,26 @@ const CustomChat = (props) => {
                 className="media-left mr-3"
                 onClick={() => profileSideBarToggle(profileToggle)}
               >
-                {/* <div
-                  className={`profile menu-trigger ${random}`}
+                <div
+                  className={`profile menu-trigger ${chatWith.status}`}
                   style={{
                     backgroundImage: `url('assets/images/${selectedUser.thumb}')`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     display: "block",
                   }}
-                ></div> */}
+                ></div>
               </div>
               <div className="media-body">
-                <h5>{chatWith}</h5>
+                <h5>{chatWith.name}</h5>
                 <div
                   className={`badge ${
-                    random === "online" ? "badge-success" : "badge-danger"
+                    chatWith.status === "online"
+                      ? "badge-success"
+                      : "badge-danger"
                   }`}
                 >
-                  {random === "online" ? "Active" : "InActive"}
+                  {chatWith.status === "online" ? "Active" : "InActive"}
                 </div>
               </div>
               <div className="media-right">
@@ -263,7 +262,7 @@ const CustomChat = (props) => {
                         alt="Avatar"
                       />
                       <div className="center-con text-center">
-                        <div id="basicUsage2">{props.timeValues}</div>
+                        {/* <div id="basicUsage2">{props.timeValues}</div> */}
                         <div className="title2">Josephin water</div>
                         <h6>log angelina california</h6>
                         <ul>
@@ -420,7 +419,7 @@ const CustomChat = (props) => {
                           <h5>Josephin water</h5>
                           <h6>America ,California</h6>
                         </div>
-                        <div id="basicUsage">{props.timeValues}</div>
+                        {/* <div id="basicUsage">{props.timeValues}</div> */}
                         <div className="zoomcontent">
                           <a
                             className="text-dark"
@@ -552,533 +551,556 @@ const CustomChat = (props) => {
         </div>
       </div>
       <div className="contact-chat">
+        {/* Displaying messages */}
         <ul className="chatappend">
-          {/* {selectedUser.id === 1 ? (
-            <>
-              <li className="replies">
-                <div className="media">
-                  <div
-                    className="profile mr-4"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/2.jpg')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      display: "block",
-                    }}
+          <>
+            {/* my replies  */}
+            {allmessages &&
+              allmessages
+                .filter((item) => {
+                  return item.from === chatWith.id;
+                })
+                .map((item, idx) => (
+                  <li
+                    className={item.direction === "send" ? "replies" : "sent"}
                   >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/2.jpg"
-                      alt="Avatar"
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                  <div className="media-body">
-                    <div className="contact-name">
-                      <h5>Alan josheph</h5>
-                      <h6>01:40 AM</h6>
-                      <ul className="msg-box">
-                        <li className="msg-setting-main">
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div
-                              className="msg-dropdown"
-                              style={{ display: "block" }}
-                            >
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                          <h5>Hi I am Alan,</h5>
-                        </li>
-                        <li className="msg-setting-main">
-                          <h5>your personal assistant to help you &#128512;</h5>
-                          <div className="badge badge-success sm ml-2"> R</div>
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li className="sent">
-                <div className="media">
-                  <div
-                    className="profile mr-4"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/1.jpg')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      display: "block",
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/1.jpg"
-                      alt="Avatar"
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                  <div className="media-body">
-                    <div className="contact-name">
-                      <h5>Josephin water</h5>
-                      <h6>01:35 AM</h6>
-                      <ul className="msg-box">
-                        <li className="msg-setting-main">
-                          <h5>
-                            Hi I am Josephin, can you help me to find best chat
-                            app?.{" "}
-                          </h5>
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                        <li className="msg-setting-main">
-                          <h5> it should from elite auther &#128519;</h5>
-                          <div className="badge badge-success sm ml-2"> R</div>
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li className="replies">
-                <div className="media">
-                  <div
-                    className="profile mr-4"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/2.jpg')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      display: "block",
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/2.jpg"
-                      alt="Avatar"
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                  <div className="media-body">
-                    <div className="contact-name">
-                      <h5>Alan josheph</h5>
-                      <h6>01:40 AM</h6>
-                      <ul className="msg-box">
-                        <li className="msg-setting-main">
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                          <h5>
-                            Sure, chitchat is best theme for chating project,
-                            you can it check
-                            <a
-                              className="ml-1"
-                              href="https://themeforest.net/user/pixelstrap/portfolio"
-                              target="_blank"
-                            >
-                              here.
-                            </a>
-                          </h5>
-                        </li>
-                        <li className="msg-setting-main">
-                          <div className="document">
-                            <i className="fa fa-file-excel-o font-primary"></i>
-                            <div className="details">
-                              <h5>Document.xlsx</h5>
-                              <h6>25mb Seprate file</h6>
-                            </div>
-                            <div className="icon-btns">
-                              <a
-                                className="icon-btn btn-outline-light"
-                                href="/assets/doc/Document.xlsx"
-                                target="_blank"
-                              >
-                                <Download />
-                              </a>
-                            </div>
-                          </div>
-                          <div className="badge badge-dark sm ml-2"> D</div>
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li className="sent">
-                <div className="media">
-                  <div
-                    className="profile mr-4"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/1.jpg')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      display: "block",
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/1.jpg"
-                      alt="Avatar"
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                  <div className="media-body">
-                    <div className="contact-name">
-                      <h5>Josephin water</h5>
-                      <h6>01:42 AM</h6>
-                      <ul className="msg-box">
-                        <li className="msg-setting-main">
-                          <h5>I think it's best for my project.</h5>
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </li>
-                        <li className="msg-setting-main">
-                          <ul className="auto-gallery">
-                            <li
-                              style={{
-                                backgroundImage: `url('assets/images/media/1.jpg')`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                display: "block",
-                              }}
-                            >
-                              <img
-                                className="bg-img"
-                                src="/assets/images/media/1.jpg"
-                                alt="Avatar"
-                                style={{ display: "none" }}
-                              />
+                    <div className="media">
+                      <div
+                        className="profile mr-4"
+                        style={{
+                          backgroundImage: `url('assets/images/contact/2.jpg')`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          display: "block",
+                        }}
+                      >
+                        <img
+                          className="bg-img"
+                          src="/assets/images/contact/2.jpg"
+                          alt="Avatar"
+                          style={{ display: "none" }}
+                        />
+                      </div>
+                      <div className="media-body">
+                        <div className="contact-name">
+                          <h5>{chatWith.name}</h5>
+                          <h6>01:40 AM</h6>
+                          <ul className="msg-box">
+                            <li className="msg-setting-main">
+                              <div className="msg-dropdown-main">
+                                <div className="msg-setting">
+                                  <i className="ti-more-alt"></i>
+                                </div>
+                                <div
+                                  className="msg-dropdown"
+                                  style={{ display: "block" }}
+                                >
+                                  <ul>
+                                    <li>
+                                      <a href="#">
+                                        <i className="fa fa-share"></i>forward
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <i className="fa fa-clone"></i>copy
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <i className="fa fa-star-o"></i>rating
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <i className="ti-trash"></i>delete
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <h5>
+                                {item.messageBody}{" "}
+                                <span className="badge badge-success sm ml-2">
+                                  {" "}
+                                  R
+                                </span>
+                              </h5>
+                              {/* <div className="badge badge-success sm ml-2">
+                                {" "}
+                              
+                              </div> */}
                             </li>
-                            <li
-                              style={{
-                                backgroundImage: `url('assets/images/media/2.jpg')`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                display: "block",
-                              }}
-                            >
-                              <img
-                                className="bg-img"
-                                src="/assets/images/media/2.jpg"
-                                alt="Avatar"
-                                style={{ display: "none" }}
-                              />
-                            </li>
-                            <li
-                              style={{
-                                backgroundImage: `url('assets/images/media/3.jpg')`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                display: "block",
-                              }}
-                            >
-                              <img
-                                className="bg-img"
-                                src="/assets/images/media/3.jpg"
-                                alt="Avatar"
-                                style={{ display: "none" }}
-                              />
+                            <li className="msg-setting-main">
+                              {/* <h5>
+                                your personal assistant to help you &#128512;
+                              </h5> */}
+                              {/* <div className="badge badge-success sm ml-2">
+                                {" "}
+                                R
+                              </div> */}
+                              <div className="msg-dropdown-main">
+                                <div className="msg-setting">
+                                  <i className="ti-more-alt"></i>
+                                </div>
+                                <div className="msg-dropdown">
+                                  <ul>
+                                    <li>
+                                      <a href="#">
+                                        <i className="fa fa-share"></i>forward
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <i className="fa fa-clone"></i>copy
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <i className="fa fa-star-o"></i>rating
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a href="#">
+                                        <i className="ti-trash"></i>delete
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
                             </li>
                           </ul>
-                          <div className="refresh-block">
-                            <div
-                              className="badge badge-outline-primary refresh sm ml-2"
-                              onClick={(e) => refreshCw(e)}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+            {/* received here  */}
+            {/* <li className="sent">
+              <div className="media">
+                <div
+                  className="profile mr-4"
+                  style={{
+                    backgroundImage: `url('assets/images/contact/1.jpg')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "block",
+                  }}
+                >
+                  <img
+                    className="bg-img"
+                    src="/assets/images/contact/1.jpg"
+                    alt="Avatar"
+                    style={{ display: "none" }}
+                  />
+                </div>
+                <div className="media-body">
+                  <div className="contact-name">
+                    <h5>Josephin water</h5>
+                    <h6>01:35 AM</h6>
+                    <ul className="msg-box">
+                      <li className="msg-setting-main">
+                        <h5>
+                          Hi I am Josephin, can you help me to find best chat
+                          app?.{" "}
+                        </h5>
+                        <div className="msg-dropdown-main">
+                          <div className="msg-setting">
+                            <i className="ti-more-alt"></i>
+                          </div>
+                          <div className="msg-dropdown">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-share"></i>forward
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-clone"></i>copy
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-star-o"></i>rating
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="ti-trash"></i>delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="msg-setting-main">
+                        <h5> it should from elite auther &#128519;</h5>
+                        <div className="badge badge-success sm ml-2"> R</div>
+                        <div className="msg-dropdown-main">
+                          <div className="msg-setting">
+                            <i className="ti-more-alt"></i>
+                          </div>
+                          <div className="msg-dropdown">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-share"></i>forward
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-clone"></i>copy
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-star-o"></i>rating
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="ti-trash"></i>delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li> */}
+            {/* <li className="replies">
+              <div className="media">
+                <div
+                  className="profile mr-4"
+                  style={{
+                    backgroundImage: `url('assets/images/contact/2.jpg')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "block",
+                  }}
+                >
+                  <img
+                    className="bg-img"
+                    src="/assets/images/contact/2.jpg"
+                    alt="Avatar"
+                    style={{ display: "none" }}
+                  />
+                </div>
+                <div className="media-body">
+                  <div className="contact-name">
+                    <h5>Alan josheph</h5>
+                    <h6>01:40 AM</h6>
+                    <ul className="msg-box">
+                      <li className="msg-setting-main">
+                        <div className="msg-dropdown-main">
+                          <div className="msg-setting">
+                            <i className="ti-more-alt"></i>
+                          </div>
+                          <div className="msg-dropdown">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-share"></i>forward
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-clone"></i>copy
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-star-o"></i>rating
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="ti-trash"></i>delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <h5>
+                          Sure, chitchat is best theme for chating project, you
+                          can it check
+                          <a
+                            className="ml-1"
+                            href="https://themeforest.net/user/pixelstrap/portfolio"
+                            target="_blank"
+                          >
+                            here.
+                          </a>
+                        </h5>
+                      </li>
+                      <li className="msg-setting-main">
+                        <div className="document">
+                          <i className="fa fa-file-excel-o font-primary"></i>
+                          <div className="details">
+                            <h5>Document.xlsx</h5>
+                            <h6>25mb Seprate file</h6>
+                          </div>
+                          <div className="icon-btns">
+                            <a
+                              className="icon-btn btn-outline-light"
+                              href="/assets/doc/Document.xlsx"
+                              target="_blank"
                             >
-                              <RotateCw />
-                            </div>
-                            <div className="badge badge-danger sm ml-2">F</div>
+                              <Download />
+                            </a>
                           </div>
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
+                        </div>
+                        <div className="badge badge-dark sm ml-2"> D</div>
+                        <div className="msg-dropdown-main">
+                          <div className="msg-setting">
+                            <i className="ti-more-alt"></i>
                           </div>
-                        </li>
-                      </ul>
-                    </div>
+                          <div className="msg-dropdown">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-share"></i>forward
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-clone"></i>copy
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-star-o"></i>rating
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="ti-trash"></i>delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              </li>
-              <li className="replies">
-                <div className="media">
-                  <div
-                    className="profile mr-4"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/2.jpg')`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      display: "block",
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/2.jpg"
-                      alt="Avatar"
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                  <div className="media-body">
-                    <div className="contact-name">
-                      <h5>Alan josheph</h5>
-                      <h6>01:45 AM</h6>
-                      <ul className="msg-box">
-                        <li className="msg-setting-main">
-                          <h5>
-                            If you have any other query then feel free to ask
-                            us.
-                          </h5>
-                          <div className="msg-dropdown-main">
-                            <div className="msg-setting">
-                              <i className="ti-more-alt"></i>
-                            </div>
-                            <div className="msg-dropdown">
-                              <ul>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-share"></i>forward
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-clone"></i>copy
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="fa fa-star-o"></i>rating
-                                  </a>
-                                </li>
-                                <li>
-                                  <a href="#">
-                                    <i className="ti-trash"></i>delete{" "}
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
+              </div>
+            </li>
+            <li className="sent">
+              <div className="media">
+                <div
+                  className="profile mr-4"
+                  style={{
+                    backgroundImage: `url('assets/images/contact/1.jpg')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "block",
+                  }}
+                >
+                  <img
+                    className="bg-img"
+                    src="/assets/images/contact/1.jpg"
+                    alt="Avatar"
+                    style={{ display: "none" }}
+                  />
+                </div>
+                <div className="media-body">
+                  <div className="contact-name">
+                    <h5>Josephin water</h5>
+                    <h6>01:42 AM</h6>
+                    <ul className="msg-box">
+                      <li className="msg-setting-main">
+                        <h5>I think it's best for my project.</h5>
+                        <div className="msg-dropdown-main">
+                          <div className="msg-setting">
+                            <i className="ti-more-alt"></i>
                           </div>
-                        </li>
-                      </ul>
-                    </div>
+                          <div className="msg-dropdown">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-share"></i>forward
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-clone"></i>copy
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-star-o"></i>rating
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="ti-trash"></i>delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="msg-setting-main">
+                        <ul className="auto-gallery">
+                          <li
+                            style={{
+                              backgroundImage: `url('assets/images/media/1.jpg')`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              display: "block",
+                            }}
+                          >
+                            <img
+                              className="bg-img"
+                              src="/assets/images/media/1.jpg"
+                              alt="Avatar"
+                              style={{ display: "none" }}
+                            />
+                          </li>
+                          <li
+                            style={{
+                              backgroundImage: `url('assets/images/media/2.jpg')`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              display: "block",
+                            }}
+                          >
+                            <img
+                              className="bg-img"
+                              src="/assets/images/media/2.jpg"
+                              alt="Avatar"
+                              style={{ display: "none" }}
+                            />
+                          </li>
+                          <li
+                            style={{
+                              backgroundImage: `url('assets/images/media/3.jpg')`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              display: "block",
+                            }}
+                          >
+                            <img
+                              className="bg-img"
+                              src="/assets/images/media/3.jpg"
+                              alt="Avatar"
+                              style={{ display: "none" }}
+                            />
+                          </li>
+                        </ul>
+                        <div className="refresh-block">
+                          <div
+                            className="badge badge-outline-primary refresh sm ml-2"
+                            onClick={(e) => refreshCw(e)}
+                          >
+                            <RotateCw />
+                          </div>
+                          <div className="badge badge-danger sm ml-2">F</div>
+                        </div>
+                        <div className="msg-dropdown-main">
+                          <div className="msg-setting">
+                            <i className="ti-more-alt"></i>
+                          </div>
+                          <div className="msg-dropdown">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-share"></i>forward
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-clone"></i>copy
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-star-o"></i>rating
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="ti-trash"></i>delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              </li>
-            </>
-          ) : (
-            ""
-          )} */}
+              </div>
+            </li>
+            <li className="replies">
+              <div className="media">
+                <div
+                  className="profile mr-4"
+                  style={{
+                    backgroundImage: `url('assets/images/contact/2.jpg')`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "block",
+                  }}
+                >
+                  <img
+                    className="bg-img"
+                    src="/assets/images/contact/2.jpg"
+                    alt="Avatar"
+                    style={{ display: "none" }}
+                  />
+                </div>
+                <div className="media-body">
+                  <div className="contact-name">
+                    <h5>Alan josheph</h5>
+                    <h6>01:45 AM</h6>
+                    <ul className="msg-box">
+                      <li className="msg-setting-main">
+                        <h5>
+                          If you have any other query then feel free to ask us.
+                        </h5>
+                        <div className="msg-dropdown-main">
+                          <div className="msg-setting">
+                            <i className="ti-more-alt"></i>
+                          </div>
+                          <div className="msg-dropdown">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-share"></i>forward
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-clone"></i>copy
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="fa fa-star-o"></i>rating
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <i className="ti-trash"></i>delete{" "}
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li> */}
+          </>
+
           {/* {selectedChat?.messages.length > 0 ? (
             selectedChat.messages.map((item, index) => {
               const participators = chatMembers.find(

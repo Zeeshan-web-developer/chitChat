@@ -70,6 +70,29 @@ export const updateLastMessageTime = (payload) => ({
   },
 });
 
+export const setRoster = (contacts) => ({
+  type: actionTypes.SET_ROSTER,
+  payload: contacts,
+});
+
+export const updateUserStatus = (payload) => ({
+  type: actionTypes.UPDATE_USER_STATUS,
+  payload: {
+    id: payload.id,
+    onlineStatus: payload.onlineStatus,
+  },
+});
+
+export const setAllUsers = (payload) => ({
+  type: actionTypes.SET_ALL_USERS,
+  payload: payload,
+});
+
+export const setNewMessage = (payload) => ({
+  type: actionTypes.SET_NEW_MESSAGE,
+  payload,
+});
+
 export const fetchUsers = () => {
   try {
     return async (dispatch) => {

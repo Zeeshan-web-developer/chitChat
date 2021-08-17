@@ -94,8 +94,11 @@ const Auth_SignIn = (props) => {
         }),
         { path: "/", expires: d }
       );
-
-      router.push("/messenger");
+      localStorage.setItem("username", jid);
+      localStorage.setItem("password", password);
+      setTimeout(() => {
+        router.push("/messenger");
+      }, 9000);
     });
     client.on("available", (presence) => dispatch(setUSerStatus("available")));
     client.connect();

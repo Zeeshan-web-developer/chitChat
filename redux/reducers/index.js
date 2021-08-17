@@ -10,9 +10,39 @@ const initialState = {
   loading: false,
   activeTab: "chat",
   users: [],
-  chatWith: "A",
+  chatWith: { name: "A", status: "online", id: 2 },
   newContact: "contact",
   componentUnmount: null,
+  roster: "",
+  alluserStatus: [],
+  allusers: [],
+  allMessage: [
+    {
+      from: 2,
+      to: 1,
+      messageTime: "2021-08-07 09:03:10",
+      messageBody: "i have received this message from user with id 2",
+      chatType: "chat",
+      direction: "received",
+    },
+
+    {
+      from: 1,
+      to: 2,
+      messageTime: "2021-08-07 09:03:10",
+      messageBody: "assume i amm a logged in user . i am sending this message",
+      chatType: "chat",
+      direction: "send",
+    },
+    {
+      from: 2,
+      to: 1,
+      messageTime: "2021-08-07 09:03:10",
+      messageBody: "i have received second  message from user with id 2",
+      chatType: "chat",
+      direction: "received",
+    },
+  ],
   chatedUsers: [
     {
       id: 1,
@@ -26,10 +56,10 @@ const initialState = {
     {
       id: 2,
       first_name: "BRONNNZE",
-      status: "online",
+      status: "offline",
       mesg: "how are you",
       lastSeenDate: "30/11/19",
-      onlineStatus: "online",
+      onlineStatus: "offline",
       lastMessageAt: "2021-08-07 09:03:56",
     },
   ],
@@ -77,6 +107,7 @@ const user_reducer = (state = initialState, action) => {
         ...state,
         chatWith: action.payload,
       };
+
     case actionTypes.SET_CHATED_USERS:
       return {
         ...state,
@@ -95,6 +126,13 @@ const user_reducer = (state = initialState, action) => {
 
         chatedUsers: [action.payload, ...state.chatedUsers],
       };
+
+    case actionTypes.SET_NEW_MESSAGE:
+      return {
+        ...state,
+
+        allMessage: [...state.allMessage, action.payload],
+      };
     case actionTypes.REMOVE_USER:
       return {
         ...state,
@@ -112,6 +150,44 @@ const user_reducer = (state = initialState, action) => {
           },
         },
       });
+
+    case actionTypes.SET_ROSTER:
+      return {
+        ...state,
+        roster: [...state.roster, action.payload],
+      };
+    case actionTypes.SET_ALL_USERS:
+      return {
+        ...state,
+        allusers: action.payload,
+      };
+    case actionTypes.UPDATE_USER_STATUS:
+      console.log("inside reducer");
+      let found =
+        state.alluserStatus && state.alluserStatus.length
+          ? !!state.alluserStatus.find((u) => u.id === action.payload.id)
+          : false;
+
+      //if the user is already
+      if (found) {
+        console.log("user alredy already exists");
+        return {
+          ...state,
+          alluserStatus: state.alluserStatus.map((userStatus, i) =>
+            userStatus.id === action.payload.id
+              ? { ...userStatus, onlineStatus: action.payload.onlineStatus }
+              : userStatus
+          ),
+        };
+
+        //update the user status for fist time
+      } else {
+        return {
+          ...state,
+          alluserStatus: [...state.alluserStatus, action.payload],
+        };
+      }
+
     default: {
       return state;
     }
