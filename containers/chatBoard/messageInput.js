@@ -15,9 +15,15 @@ import {
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import ChatContext from "../../helpers/chatContext";
 import { useDispatch, useSelector } from "react-redux";
-import { setNewMessage } from "../../redux/actions/index";
+import {
+  setNewMessage,
+  updateLastMessageTime,
+  setLastMessage,
+} from "../../redux/actions/index";
+import { sendNewMessage } from "../../stanza/chatClient";
 import dateTime from "../leftSidebar/datetime";
 import axios from "axios";
+const DOMAIN = process.env.NEXT_PUBLIC_REACT_APP_DEFAULT_DOMAIN;
 
 const MessageInput = () => {
   const dispatch = useDispatch();
@@ -101,18 +107,25 @@ const MessageInput = () => {
         setMessageInput("");
         // typingMessage(true);
         console.log("message", messageInput);
-        // Here we need to send meesage to the user
         console.log("ids", loggedInUserID, chatWithID);
         const newMessage = {
           from: loggedInUserID,
-          to: chatWithID + "@mongoose.mysmartpbx.org",
-          messageTime: dateTime(),
+          to: chatWithID,
           body: messageInput,
-          chatType: "chat",
-          direction: "send",
+          type: "chat",
         };
+        console.log("newMessage", newMessage);
+        sendNewMessage(newMessage);
+        newMessage["messageTime"] = dateTime();
+        newMessage["direction"] = "send";
         dispatch(setNewMessage(newMessage));
-        client && client.sendMessage(newMessage);
+        dispatch(
+          setLastMessage({
+            id: chatWithID,
+            message: messageInput,
+            time: dateTime(),
+          })
+        );
       }
     }
   };

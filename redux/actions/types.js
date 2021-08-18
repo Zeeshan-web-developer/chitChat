@@ -16,3 +16,4 @@ export const SET_ROSTER = "SET_ROSTER";
 export const UPDATE_USER_STATUS = "UPDATE_USER_STATUS";
 export const SET_ALL_USERS = "SET_ALL_USERS";
 export const SET_NEW_MESSAGE = "SET_NEW_MESSAGE";
+export const SET_LAST_MESSAGE = "SET_LAST_MESSAGE";

@@ -5,6 +5,7 @@ import { FormGroup, Input } from "reactstrap";
 import dateTime from "./datetime";
 import Logo from "./1.jpg";
 import { Nav, TabContent } from "reactstrap";
+import Avatar from "react-avatar";
 import {
   fetchUsers,
   setChatWith,
@@ -75,7 +76,8 @@ function form() {
     let foundID;
     /* SEARCH CONTACT IN CHAT TAB  RETURN:TRUE IF PRESENT,RETURN FALSE IF NOT PRESENT */
     for (var i = 0; i < recentUsers.length; i++) {
-      if (recentUsers[i].id === item.id) {
+      console.log("new item id", item.id);
+      if (recentUsers[i].id === item.id + "@mongoose.mysmartpbx.org") {
         found = true;
         foundID = recentUsers[i].id;
         break;
@@ -96,12 +98,10 @@ function form() {
       });
       dispatch(
         addNewUSer({
-          id: item.id,
+          id: item.id + "@mongoose.mysmartpbx.org",
           first_name: item.first_name,
           status: item.onlineusers,
-          mesg: `msg at ${dateTime()}`,
           onlineStatus: item.onlineStatus,
-          lastMessageAt: dateTime(),
         })
       );
     }
@@ -193,7 +193,7 @@ function form() {
                             setChatWith({
                               name: chatlist.first_name,
                               status: chatlist.onlineStatus,
-                              id: chatlist.id,
+                              id: chatlist.id + "@mongoose.mysmartpbx.org",
                             })
                           );
                           dispatch(setActiveTab("chat"));
@@ -212,12 +212,19 @@ function form() {
                               display: "block",
                             }}
                           >
-                            <img
+                            {/* <img
                               className="bg-img"
                               src={Logo}
                               alt="Avatar"
                               style={{ display: "none" }}
-                            />
+                            /> */}
+                            {/* <Avatar
+                              className={`profile ${chatlist.onlineStatus}`}
+                              style={{ display: "none" }}
+                              name={chatlist.first_name}
+                              size={45}
+                              rounded={true}
+                            /> */}
                           </div>
 
                           <div className="details">

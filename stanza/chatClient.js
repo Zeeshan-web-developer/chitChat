@@ -1,12 +1,18 @@
 import * as XMPP from "stanza";
+import dateTime from "../containers/leftSidebar/datetime";
 import store from "../redux/store/store";
-import { updateUserStatus, setLoginError } from "../redux/actions/index";
+import {
+  updateUserStatus,
+  setLoginError,
+  setNewMessage,
+} from "../redux/actions/index";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 const cokie = cookies.get("credentials");
 let client;
 
 export default function chatClient(username, password) {
+  console.log("connection request");
   client = XMPP.createClient({
     jid: username,
     password,
@@ -26,25 +32,27 @@ export default function chatClient(username, password) {
   //pinging the server
   setInterval(() => {
     var ifConnected = window.navigator.onLine;
+    let reconnect;
     if (ifConnected) {
-      // console.log("internet Connection available");
       client
         .ping(username)
         .then((message) => {
-          //console.log("ping send");
+          console.log("Messaage ping");
         })
         .catch((error) => {
-          // const user = localStorage.getItem("username");
-          // const pass = localStorage.getItem("password");
-          //console.log("ping error", error);
-          // let reconnect = chatClient(user, pass);
-          // console.log("connect", reconnect);
-          // reconnect.connect();
+          const user = localStorage.getItem("username");
+          const pass = localStorage.getItem("password");
+          console.log("ping error", error);
+          reconnect = chatClient(user, pass);
+          console.log("connect", user, pass);
+          reconnect.disconnect();
+          reconnect.connect();
         });
     } else {
       console.log("Connection not available");
+      reconnect.disconnect();
     }
-  }, 13000);
+  }, 60000);
 
   client.on("auth:failed", () => {
     console.log("xmpp authentication failed");
@@ -87,6 +95,14 @@ export default function chatClient(username, password) {
   // client.on("available", (presence) => {
   //   console.log("available", presence);
   // });
+
+  //here we listen incoming messages
+  client.on("message", (newMessage) => {
+    newMessage["messageTime"] = dateTime();
+    newMessage["direction"] = "received";
+    newMessage["from"] = newMessage.from.split("/")[0];
+    store.dispatch(setNewMessage(newMessage));
+  });
   return client;
 }
 
@@ -99,4 +115,8 @@ const getContacts = async () => {
 
 export const getRosterItems = () => {
   return roster;
+};
+
+export const sendNewMessage = (newMessage) => {
+  client && client.sendMessage(newMessage);
 };

@@ -21,7 +21,7 @@ const initialState = {
       from: 2,
       to: 1,
       messageTime: "2021-08-07 09:03:10",
-      messageBody: "i have received this message from user with id 2",
+      body: "i have received this message from user with id 2",
       chatType: "chat",
       direction: "received",
     },
@@ -30,7 +30,7 @@ const initialState = {
       from: 1,
       to: 2,
       messageTime: "2021-08-07 09:03:10",
-      messageBody: "assume i amm a logged in user . i am sending this message",
+      body: "assume i amm a logged in user . i am sending this message",
       chatType: "chat",
       direction: "send",
     },
@@ -38,7 +38,7 @@ const initialState = {
       from: 2,
       to: 1,
       messageTime: "2021-08-07 09:03:10",
-      messageBody: "i have received second  message from user with id 2",
+      body: "i have received second  message from user with id 2",
       chatType: "chat",
       direction: "received",
     },
@@ -151,6 +151,26 @@ const user_reducer = (state = initialState, action) => {
         },
       });
 
+    case actionTypes.SET_LAST_MESSAGE:
+      let foun =
+        state.chatedUsers && state.chatedUsers.length
+          ? !!state.chatedUsers.find((u) => u.id === action.payload.id)
+          : false;
+      console.log("function", foun, action.payload.id);
+      if (foun) {
+        return {
+          ...state,
+          chatedUsers: state.chatedUsers.map((user, i) =>
+            user.id === action.payload.id
+              ? {
+                  ...user,
+                  mesg: action.payload.lastMessage,
+                  lastMessageAt: action.payload.time,
+                }
+              : user
+          ),
+        };
+      }
     case actionTypes.SET_ROSTER:
       return {
         ...state,
@@ -162,7 +182,6 @@ const user_reducer = (state = initialState, action) => {
         allusers: action.payload,
       };
     case actionTypes.UPDATE_USER_STATUS:
-      console.log("inside reducer");
       let found =
         state.alluserStatus && state.alluserStatus.length
           ? !!state.alluserStatus.find((u) => u.id === action.payload.id)

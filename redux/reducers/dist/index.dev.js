@@ -60,21 +60,21 @@ var initialState = {
     from: 2,
     to: 1,
     messageTime: "2021-08-07 09:03:10",
-    messageBody: "i have received this message from user with id 2",
+    body: "i have received this message from user with id 2",
     chatType: "chat",
     direction: "received"
   }, {
     from: 1,
     to: 2,
     messageTime: "2021-08-07 09:03:10",
-    messageBody: "assume i amm a logged in user . i am sending this message",
+    body: "assume i amm a logged in user . i am sending this message",
     chatType: "chat",
     direction: "send"
   }, {
     from: 2,
     to: 1,
     messageTime: "2021-08-07 09:03:10",
-    messageBody: "i have received second  message from user with id 2",
+    body: "i have received second  message from user with id 2",
     chatType: "chat",
     direction: "received"
   }],
@@ -178,6 +178,23 @@ var user_reducer = function user_reducer() {
         })
       });
 
+    case actionTypes.SET_LAST_MESSAGE:
+      var foun = state.chatedUsers && state.chatedUsers.length ? !!state.chatedUsers.find(function (u) {
+        return u.id === action.payload.id;
+      }) : false;
+      console.log("function", foun, action.payload.id);
+
+      if (foun) {
+        return _objectSpread({}, state, {
+          chatedUsers: state.chatedUsers.map(function (user, i) {
+            return user.id === action.payload.id ? _objectSpread({}, user, {
+              mesg: action.payload.lastMessage,
+              lastMessageAt: action.payload.time
+            }) : user;
+          })
+        });
+      }
+
     case actionTypes.SET_ROSTER:
       return _objectSpread({}, state, {
         roster: [].concat(_toConsumableArray(state.roster), [action.payload])
@@ -189,7 +206,6 @@ var user_reducer = function user_reducer() {
       });
 
     case actionTypes.UPDATE_USER_STATUS:
-      console.log("inside reducer");
       var found = state.alluserStatus && state.alluserStatus.length ? !!state.alluserStatus.find(function (u) {
         return u.id === action.payload.id;
       }) : false; //if the user is already

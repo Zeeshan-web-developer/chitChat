@@ -70,6 +70,15 @@ export const updateLastMessageTime = (payload) => ({
   },
 });
 
+export const setLastMessage = (payload) => ({
+  type: actionTypes.SET_LAST_MESSAGE,
+  payload: {
+    id: payload.id,
+    lastMessage: payload.message,
+    time: payload.time,
+  },
+});
+
 export const setRoster = (contacts) => ({
   type: actionTypes.SET_ROSTER,
   payload: contacts,
