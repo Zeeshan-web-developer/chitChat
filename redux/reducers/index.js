@@ -62,6 +62,15 @@ const initialState = {
       onlineStatus: "offline",
       lastMessageAt: "2021-08-07 09:03:56",
     },
+    {
+      id: 3,
+      first_name: "Jon",
+      status: "offline",
+      mesg: "how are you",
+      lastSeenDate: "30/11/19",
+      onlineStatus: "offline",
+      lastMessageAt: "2021-08-07 09:03:56",
+    },
   ],
 };
 const user_reducer = (state = initialState, action) => {

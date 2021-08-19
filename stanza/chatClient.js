@@ -6,9 +6,6 @@ import {
   setLoginError,
   setNewMessage,
 } from "../redux/actions/index";
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
-const cokie = cookies.get("credentials");
 let client;
 
 export default function chatClient(username, password) {
@@ -21,6 +18,7 @@ export default function chatClient(username, password) {
       bosh: "false",
     },
     rosterVer: "ver14",
+    timeout: 60,
   });
   //client.on("*", console.log);
   client.on("session:started", () => {
@@ -33,6 +31,8 @@ export default function chatClient(username, password) {
   setInterval(() => {
     var ifConnected = window.navigator.onLine;
     let reconnect;
+    const user = localStorage.getItem("username");
+    const pass = localStorage.getItem("password");
     if (ifConnected) {
       client
         .ping(username)
@@ -40,19 +40,21 @@ export default function chatClient(username, password) {
           console.log("Messaage ping");
         })
         .catch((error) => {
-          const user = localStorage.getItem("username");
-          const pass = localStorage.getItem("password");
           console.log("ping error", error);
           reconnect = chatClient(user, pass);
           console.log("connect", user, pass);
-          reconnect.disconnect();
+          //reconnect.disconnect();
           reconnect.connect();
+          setTimeout(() => {
+            console.log("after error connect to the server after 60 secnods");
+            reconnect.connect();
+          }, 60000);
         });
     } else {
       console.log("Connection not available");
-      reconnect.disconnect();
+      client.disconnect();
     }
-  }, 60000);
+  }, 5000);
 
   client.on("auth:failed", () => {
     console.log("xmpp authentication failed");

@@ -7,11 +7,11 @@ function chatedUsers() {
   const dispatch = useDispatch();
   const unmount = useSelector((state) => state.user.componentUnmount);
   const recentUSers = useSelector((state) => state.user.chatedUsers);
-
+  const chatWithID = useSelector((state) => state.user.chatWith.id);
   const changeChatClick = (e) => {
-    document.querySelectorAll(".chat-main li").forEach((item) => {
-      item.classList.remove("active");
-    });
+    // document.querySelectorAll(".chat-main li").forEach((item) => {
+    //   item.classList.remove("active");
+    // });
     e.currentTarget.classList.add("active");
     document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
   };
@@ -44,13 +44,7 @@ function chatedUsers() {
           {SotedUsers.map((chatlist, i) => {
             return (
               <li
-                className={`${
-                  1 === chatlist.id && !chatlist.mesg && i == 0
-                    ? "active"
-                    : chatlist.mesg && i == 0
-                    ? "active"
-                    : ""
-                }`}
+                className={`${chatWithID === chatlist.id ? "active" : ""}`}
                 key={i}
                 onClick={(e) => {
                   changeChatClick(e, chatlist);
@@ -87,7 +81,7 @@ function chatedUsers() {
                   </div>
                   <div className="date-status">
                     <i className="ti-pin2" onClick={(e) => Tipin(e)}></i>
-                    <h6>{chatlist.lastSeenDate}</h6>
+                    <h6>{chatlist.lastMessageAt}</h6>
                     {chatlist.status === "Sending" || "Failed" || "Seen" ? (
                       <h6
                         className={`${

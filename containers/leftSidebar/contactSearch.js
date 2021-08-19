@@ -28,6 +28,7 @@ function form() {
   let filteredUsers;
 
   const recentUsers = useSelector((state) => state.user.chatedUsers);
+  const chatWithID = useSelector((state) => state.user.chatWith.id);
   const [searchTerm, setSearch] = useState(null);
   const [chatSubTab, setChatSubTab] = useState("contacts");
   const [onlineusers, setOnlineusers] = useState([]);
@@ -71,6 +72,7 @@ function form() {
     return mergeArray;
   };
 
+  //This function is used to add new user in the recent users
   const addNew = (item) => {
     let found = false;
     let foundID;
@@ -84,16 +86,21 @@ function form() {
       }
     }
 
-    /* if contact is present append messages */
+    /* if contact is present append messages remove if any is without message atrribute */
     if (found) {
-      let objIndex = recentUsers.findIndex((obj) => obj.id == foundID);
-      dispatch(updateLastMessageTime({ id: objIndex, time: dateTime() }));
+      recentUsers.map((ci) => {
+        if (!ci.hasOwnProperty("mesg")) {
+          dispatch(removeRecentUser(ci.id));
+          console.log("remove first");
+        }
+      });
     }
     /* If not present in chat section.if any other is present without mesg attribute remove first then add*/
     if (!found) {
       recentUsers.map((ci) => {
         if (!ci.hasOwnProperty("mesg")) {
           dispatch(removeRecentUser(ci.id));
+          console.log("remove first");
         }
       });
       dispatch(
@@ -102,6 +109,7 @@ function form() {
           first_name: item.first_name,
           status: item.onlineusers,
           onlineStatus: item.onlineStatus,
+          status: item.onlineStatus,
         })
       );
     }
@@ -115,6 +123,7 @@ function form() {
     document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
   };
 
+  //This is used to send frind request ,it sends xmpp mesage if any user is not in our roster
   const addToRoster = async (item) => {
     let jidd = item.id + "@mongoose.mysmartpbx.org";
     let contacts1 = await client.getRoster();
@@ -183,9 +192,15 @@ function form() {
                     }
                   })
                   .map((chatlist, i) => {
+                    chatlist["status"] = "sending";
                     return (
                       <li
-                        className={`${1 === chatlist.id ? "active" : ""}`}
+                        className={`${
+                          chatWithID ===
+                          chatlist.id + "@mongoose.mysmartpbx.org"
+                            ? "active"
+                            : ""
+                        }`}
                         key={i}
                         onClick={(e) => {
                           changeChatClick(e, chatlist);
@@ -236,29 +251,33 @@ function form() {
                               className="ti-pin2"
                               onClick={(e) => Tipin(e)}
                             ></i>
-                            {/* <h6>{chatlist.lastSeenDate}</h6> */}
-                            {/* {chatlist.status === "Sending" || "Failed" || "Seen" ? (
-                      <h6
-                        className={`${
-                          chatlist.status === "Sending"
-                            ? "font-dark"
-                            : chatlist.status === "Failed"
-                            ? "font-danger"
-                            : "font-success"
-                        }  status`}
-                      >
-                        {chatlist.status === "8" ? "" : chatlist.status}
-                      </h6>
-                    ) : (
-                      ""
-                    )} */}
+                            <h6 className="font-success status">
+                              {chatlist.onlineStatus}
+                            </h6>
+                            {/* {chatlist.status === "Sending" ||
+                            "Failed" ||
+                            "Seen" ? (
+                              <h6
+                                className={`${
+                                  chatlist.status === "Sending"
+                                    ? "font-dark"
+                                    : chatlist.status === "Failed"
+                                    ? "font-danger"
+                                    : "font-success"
+                                }  status`}
+                              >
+                                {chatlist.status === "8" ? "" : chatlist.status}
+                              </h6>
+                            ) : (
+                              ""
+                            )} */}
                             {/* {chatlist.status === "8" ? (
-                      <div className="badge badge-primary sm">
-                        {chatlist.status}
-                      </div>
-                    ) : (
-                      ""
-                    )} */}
+                              <div className="badge badge-primary sm">
+                                {chatlist.status}
+                              </div>
+                            ) : (
+                              ""
+                            )} */}
                           </div>
                         </div>
                       </li>

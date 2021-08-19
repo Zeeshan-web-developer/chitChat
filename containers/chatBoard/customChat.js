@@ -558,7 +558,7 @@ const CustomChat = (props) => {
             {allmessages &&
               allmessages
                 .filter((item) => {
-                  return item.from === chatWith.id;
+                  return item.to === chatWith.id;
                 })
                 .map((item, idx) => (
                   <li
@@ -620,7 +620,7 @@ const CustomChat = (props) => {
                                 </div>
                               </div>
                               <h5>
-                                {item.messageBody}{" "}
+                                {item.body}{" "}
                                 <span className="badge badge-success sm ml-2">
                                   {" "}
                                   R

@@ -16,16 +16,12 @@ var _store = _interopRequireDefault(require("../redux/store/store"));
 
 var _index = require("../redux/actions/index");
 
-var _universalCookie = _interopRequireDefault(require("universal-cookie"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var cookies = new _universalCookie["default"]();
-var cokie = cookies.get("credentials");
 var client;
 
 function chatClient(username, password) {
@@ -37,7 +33,8 @@ function chatClient(username, password) {
       websocket: "ws://mongoose.mysmartpbx.org:5280/ws-xmpp",
       bosh: "false"
     },
-    rosterVer: "ver14"
+    rosterVer: "ver14",
+    timeout: 60
   }); //client.on("*", console.log);
 
   client.on("session:started", function () {
@@ -49,24 +46,28 @@ function chatClient(username, password) {
   setInterval(function () {
     var ifConnected = window.navigator.onLine;
     var reconnect;
+    var user = localStorage.getItem("username");
+    var pass = localStorage.getItem("password");
 
     if (ifConnected) {
       client.ping(username).then(function (message) {
         console.log("Messaage ping");
       })["catch"](function (error) {
-        var user = localStorage.getItem("username");
-        var pass = localStorage.getItem("password");
         console.log("ping error", error);
         reconnect = chatClient(user, pass);
-        console.log("connect", user, pass);
-        reconnect.disconnect();
+        console.log("connect", user, pass); //reconnect.disconnect();
+
         reconnect.connect();
+        setTimeout(function () {
+          console.log("after error connect to the server after 60 secnods");
+          reconnect.connect();
+        }, 60000);
       });
     } else {
       console.log("Connection not available");
-      reconnect.disconnect();
+      client.disconnect();
     }
-  }, 60000);
+  }, 5000);
   client.on("auth:failed", function () {
     console.log("xmpp authentication failed");
 
