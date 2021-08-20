@@ -116,18 +116,18 @@ const MessageInput = () => {
           body: messageInput + "&name:" + chatWithName,
           type: "chat",
         };
-        const sendNewMessage = {
+        const sendNewMsg = {
           from: loggedInUserID,
           to: chatWithID,
           body: messageInput,
           type: "chat",
         };
         sendNewMessage(newMessage);
-        newMessage["messageTime"] = dateTime();
-        newMessage["direction"] = "send";
-        newMessage["fromto"] = chatWithID;
+        sendNewMsg["messageTime"] = dateTime();
+        sendNewMsg["direction"] = "send";
+        sendNewMsg["fromto"] = chatWithID;
 
-        dispatch(setNewMessage(newMessage));
+        dispatch(setNewMessage(sendNewMsg));
         dispatch(
           setLastMessage({
             id: chatWithID,
