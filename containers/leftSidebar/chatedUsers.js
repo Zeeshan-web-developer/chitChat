@@ -9,9 +9,9 @@ function chatedUsers() {
   const recentUSers = useSelector((state) => state.user.chatedUsers);
   const chatWithID = useSelector((state) => state.user.chatWith.id);
   const changeChatClick = (e) => {
-    // document.querySelectorAll(".chat-main li").forEach((item) => {
-    //   item.classList.remove("active");
-    // });
+    document.querySelectorAll(".chat-main li").forEach((item) => {
+      item.classList.remove("active");
+    });
     e.currentTarget.classList.add("active");
     document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
   };

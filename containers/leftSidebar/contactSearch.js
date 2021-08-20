@@ -86,12 +86,20 @@ function form() {
       }
     }
 
-    /* if contact is present append messages remove if any is without message atrribute */
+    /* if user is already present then remove all users without message attribute then add into recent list*/
     if (found) {
       recentUsers.map((ci) => {
         if (!ci.hasOwnProperty("mesg")) {
           dispatch(removeRecentUser(ci.id));
-          console.log("remove first");
+          dispatch(
+            addNewUSer({
+              id: item.id + "@mongoose.mysmartpbx.org",
+              first_name: item.first_name,
+              status: item.onlineusers,
+              onlineStatus: item.onlineStatus,
+              status: item.onlineStatus,
+            })
+          );
         }
       });
     }

@@ -30,6 +30,7 @@ const MessageInput = () => {
   const client = useSelector((state) => state.user.client);
   const loggedInUserID = useSelector((state) => state.user.currentUser.jid);
   const chatWithID = useSelector((state) => state.user.chatWith.id);
+  const chatWithName = useSelector((state) => state.user.chatWith.name);
 
   const chatCtx = useContext(ChatContext);
   const chats = chatCtx.chats;
@@ -106,18 +107,26 @@ const MessageInput = () => {
       if (messageInput.length > 0) {
         setMessageInput("");
         // typingMessage(true);
+        let messageBody = messageInput;
         console.log("message", messageInput);
         console.log("ids", loggedInUserID, chatWithID);
         const newMessage = {
           from: loggedInUserID,
           to: chatWithID,
+          body: messageInput + "&name:" + chatWithName,
+          type: "chat",
+        };
+        const sendNewMessage = {
+          from: loggedInUserID,
+          to: chatWithID,
           body: messageInput,
           type: "chat",
         };
-        console.log("newMessage", newMessage);
         sendNewMessage(newMessage);
         newMessage["messageTime"] = dateTime();
         newMessage["direction"] = "send";
+        newMessage["fromto"] = chatWithID;
+
         dispatch(setNewMessage(newMessage));
         dispatch(
           setLastMessage({

@@ -22,6 +22,8 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var client;
 
 function chatClient(username, password) {
@@ -106,11 +108,7 @@ function chatClient(username, password) {
   //here we listen incoming messages
 
   client.on("message", function (newMessage) {
-    newMessage["messageTime"] = (0, _datetime["default"])();
-    newMessage["direction"] = "received";
-    newMessage["from"] = newMessage.from.split("/")[0];
-
-    _store["default"].dispatch((0, _index.setNewMessage)(newMessage));
+    receivedMessage(newMessage);
   });
   return client;
 }
@@ -145,7 +143,66 @@ var getRosterItems = function getRosterItems() {
 exports.getRosterItems = getRosterItems;
 
 var sendNewMessage = function sendNewMessage(newMessage) {
+  console.log("at send" + newMessage);
   client && client.sendMessage(newMessage);
 };
 
 exports.sendNewMessage = sendNewMessage;
+
+var receivedMessage = function receivedMessage(newMessage) {
+  console.log("rec", newMessage);
+  var found = false;
+
+  var recentUsers = _store["default"].getState().user.chatedUsers;
+
+  var usersP = _store["default"].getState().user.allusers;
+
+  console.log("userp", usersP);
+  var filteredUsers = usersP.length > 0 && usersP[0].filter(function (user) {
+    return user.id !== newMessage.to;
+  });
+  newMessage["messageTime"] = (0, _datetime["default"])();
+  newMessage["direction"] = "received";
+  newMessage["from"] = newMessage.from.split("/")[0];
+  newMessage["fromto"] = newMessage.from;
+  var splitBody = newMessage.body.split("&");
+  newMessage["body"] = splitBody[0];
+  newMessage["first_name"] = splitBody[1].split(":")[1];
+  console.log("after" + newMessage);
+
+  for (var i = 0; i < recentUsers.length; i++) {
+    if (recentUsers[i].id === newMessage.from) {
+      found = true;
+      break;
+    }
+  }
+
+  var name = filteredUsers && filteredUsers.find(function (item) {
+    return item.id === newMessage.from;
+  });
+  var recivedName = name.first_name;
+  console.log("recived name" + filteredUsers);
+
+  if (!found) {
+    recentUsers.map(function (ci) {
+      if (!ci.hasOwnProperty("mesg")) {
+        _store["default"].dispatch((0, _index.removeRecentUser)(ci.id));
+      }
+    });
+
+    _store["default"].dispatch((0, _index.addNewUSer)(_defineProperty({
+      id: newMessage.from,
+      first_name: newMessage.first_name,
+      status: "online",
+      onlineStatus: "online"
+    }, "status", "online")));
+  }
+
+  _store["default"].dispatch((0, _index.setNewMessage)(newMessage));
+
+  _store["default"].dispatch((0, _index.setLastMessage)({
+    id: newMessage.from,
+    message: newMessage.body,
+    time: (0, _datetime["default"])()
+  }));
+};

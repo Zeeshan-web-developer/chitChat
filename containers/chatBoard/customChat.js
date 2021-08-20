@@ -26,7 +26,10 @@ const CustomChat = (props) => {
   const dispatch = useDispatch();
   const chatWith = useSelector((state) => state.user.chatWith);
   const allmessages = useSelector((state) => state.user.allMessage);
-  console.log("allmessages");
+  const currentUserName = useSelector(
+    (state) => state.user.currentUser.username
+  );
+  const LoggedInUser = currentUserName && currentUserName.split("@")[0];
   const [volum, setVolum] = useState(true);
   const [search, setSearch] = useState(false);
   const [audiocall, setAudiocall] = useState(false);
@@ -558,11 +561,13 @@ const CustomChat = (props) => {
             {allmessages &&
               allmessages
                 .filter((item) => {
-                  return item.to === chatWith.id;
+                  console.log("item", item.from, item.to, chatWith.id);
+                  return item.fromto === chatWith.id;
                 })
                 .map((item, idx) => (
                   <li
                     className={item.direction === "send" ? "replies" : "sent"}
+                    key={idx}
                   >
                     <div className="media">
                       <div
@@ -583,7 +588,11 @@ const CustomChat = (props) => {
                       </div>
                       <div className="media-body">
                         <div className="contact-name">
-                          <h5>{chatWith.name}</h5>
+                          <h5>
+                            {/* {item.direction === "send"
+                              ? chatWith.name
+                              : LoggedInUser} */}
+                          </h5>
                           <h6>01:40 AM</h6>
                           <ul className="msg-box">
                             <li className="msg-setting-main">

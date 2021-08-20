@@ -5,6 +5,9 @@ import {
   updateUserStatus,
   setLoginError,
   setNewMessage,
+  setLastMessage,
+  removeRecentUser,
+  addNewUSer,
 } from "../redux/actions/index";
 let client;
 
@@ -100,10 +103,7 @@ export default function chatClient(username, password) {
 
   //here we listen incoming messages
   client.on("message", (newMessage) => {
-    newMessage["messageTime"] = dateTime();
-    newMessage["direction"] = "received";
-    newMessage["from"] = newMessage.from.split("/")[0];
-    store.dispatch(setNewMessage(newMessage));
+    receivedMessage(newMessage);
   });
   return client;
 }
@@ -120,5 +120,60 @@ export const getRosterItems = () => {
 };
 
 export const sendNewMessage = (newMessage) => {
+  console.log("at send" + newMessage);
   client && client.sendMessage(newMessage);
+};
+
+const receivedMessage = (newMessage) => {
+  console.log("rec", newMessage);
+  let found = false;
+  const recentUsers = store.getState().user.chatedUsers;
+  const usersP = store.getState().user.allusers;
+  console.log("userp", usersP);
+  let filteredUsers =
+    usersP.length > 0 && usersP[0].filter((user) => user.id !== newMessage.to);
+
+  newMessage["messageTime"] = dateTime();
+  newMessage["direction"] = "received";
+  newMessage["from"] = newMessage.from.split("/")[0];
+  newMessage["fromto"] = newMessage.from;
+  let splitBody = newMessage.body.split("&");
+  newMessage["body"] = splitBody[0];
+  newMessage["first_name"] = splitBody[1].split(":")[1];
+  console.log("after" + newMessage);
+  for (var i = 0; i < recentUsers.length; i++) {
+    if (recentUsers[i].id === newMessage.from) {
+      found = true;
+      break;
+    }
+  }
+  var name =
+    filteredUsers && filteredUsers.find((item) => item.id === newMessage.from);
+  let recivedName = name.first_name;
+  console.log("recived name" + filteredUsers);
+  if (!found) {
+    recentUsers.map((ci) => {
+      if (!ci.hasOwnProperty("mesg")) {
+        store.dispatch(removeRecentUser(ci.id));
+      }
+    });
+
+    store.dispatch(
+      addNewUSer({
+        id: newMessage.from,
+        first_name: newMessage.first_name,
+        status: "online",
+        onlineStatus: "online",
+        status: "online",
+      })
+    );
+  }
+  store.dispatch(setNewMessage(newMessage));
+  store.dispatch(
+    setLastMessage({
+      id: newMessage.from,
+      message: newMessage.body,
+      time: dateTime(),
+    })
+  );
 };

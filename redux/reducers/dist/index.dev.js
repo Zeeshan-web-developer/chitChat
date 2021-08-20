@@ -62,21 +62,16 @@ var initialState = {
     messageTime: "2021-08-07 09:03:10",
     body: "i have received this message from user with id 2",
     chatType: "chat",
-    direction: "received"
+    direction: "received",
+    fromto: 2
   }, {
     from: 1,
     to: 2,
     messageTime: "2021-08-07 09:03:10",
     body: "assume i amm a logged in user . i am sending this message",
     chatType: "chat",
-    direction: "send"
-  }, {
-    from: 2,
-    to: 1,
-    messageTime: "2021-08-07 09:03:10",
-    body: "i have received second  message from user with id 2",
-    chatType: "chat",
-    direction: "received"
+    direction: "send",
+    fromto: 2
   }],
   chatedUsers: [{
     id: 1,
@@ -88,14 +83,6 @@ var initialState = {
     lastMessageAt: "2021-08-07 09:03:10"
   }, {
     id: 2,
-    first_name: "BRONNNZE",
-    status: "offline",
-    mesg: "how are you",
-    lastSeenDate: "30/11/19",
-    onlineStatus: "offline",
-    lastMessageAt: "2021-08-07 09:03:56"
-  }, {
-    id: 3,
     first_name: "Jon",
     status: "offline",
     mesg: "how are you",
