@@ -19,6 +19,15 @@ var _reduxLogger = _interopRequireDefault(require("redux-logger"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var store = (0, _redux.createStore)(_index["default"], (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _reduxReset["default"])(), (0, _redux.applyMiddleware)(_reduxThunk["default"])));
+// import { persistStore, persistReducer } from "redux-persist";
+//import storage from "redux-persist/lib/storage";
+// import storage from "./storage";
+// const perssistConfig = {
+//   key: "root",
+//   storage,
+// };
+// const persistedReducer = persistReducer(perssistConfig, rootReducer);
+var store = (0, _redux.createStore)(_index["default"], (0, _reduxDevtoolsExtension.composeWithDevTools)((0, _reduxReset["default"])(), (0, _redux.applyMiddleware)(_reduxThunk["default"]))); // export const persistor = persistStore(store);
+
 var _default = store;
 exports["default"] = _default;

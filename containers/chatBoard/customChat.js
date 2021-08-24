@@ -589,9 +589,9 @@ const CustomChat = (props) => {
                       <div className="media-body">
                         <div className="contact-name">
                           <h5>
-                            {/* {item.direction === "send"
+                            {item.direction === "received"
                               ? chatWith.name
-                              : LoggedInUser} */}
+                              : LoggedInUser}
                           </h5>
                           <h6>01:40 AM</h6>
                           <ul className="msg-box">

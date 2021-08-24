@@ -6,7 +6,7 @@ import Contact from "./contact";
 import EasyTimer from "easytimer";
 
 const ChitChat = () => {
-  const currentTab = useSelector((state) => state.user.chatboard);
+  const currentTab = useSelector((state) => state.user.activeTab);
   const [timer, setTimer] = useState(new EasyTimer());
   const [timeValues, setTimeValues] = useState("");
 
@@ -22,9 +22,16 @@ const ChitChat = () => {
     const timeValue = timer.getTimeValues().toString();
     setTimeValues(timeValue);
   };
+
   return (
     <div className="chitchat-main small-sidebar" id="content">
-      {currentTab === "chat" ? <Chat /> : <Chat />}
+      {currentTab === "chat" ? (
+        <Chat />
+      ) : currentTab === "call" ? (
+        <Call />
+      ) : (
+        <Contact />
+      )}
       {/* <Contact /> */}
     </div>
   );

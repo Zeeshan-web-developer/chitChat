@@ -1,7 +1,10 @@
 import React, { useContext } from "react";
 import CustomizerContext from "../../helpers/customizerContext";
+import { useSelector } from "react-redux";
 
 const Contact = () => {
+  let chatWithName = useSelector((state) => state.user.chatWith.name);
+
   const { handleClickRight, mainMenu } = useContext(CustomizerContext);
   return (
     <div className="contact-content tabto">
@@ -22,7 +25,7 @@ const Contact = () => {
                   src="/assets/images/contact/2.jpg"
                   alt="user-img"
                 />
-                <h3>Josephin water</h3>
+                <h3>{chatWithName}</h3>
                 <ul>
                   <li>
                     <i className="fa fa-twitch"> </i>massage
@@ -125,7 +128,7 @@ const Contact = () => {
               <ul className="basic-info">
                 <li>
                   <h5>name</h5>
-                  <h5 className="details">Nick</h5>
+                  <h5 className="details">{chatWithName}</h5>
                 </li>
                 <li>
                   <h5>gender</h5>

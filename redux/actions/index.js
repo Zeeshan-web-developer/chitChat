@@ -92,6 +92,14 @@ export const updateUserStatus = (payload) => ({
   },
 });
 
+export const updateRecentUserStatus = (payload) => ({
+  type: actionTypes.UPDATE_RECENT_USER_STATUS,
+  payload: {
+    id: payload.id,
+    onlineStatus: payload.onlineStatus,
+  },
+});
+
 export const setAllUsers = (payload) => ({
   type: actionTypes.SET_ALL_USERS,
   payload: payload,

@@ -201,6 +201,26 @@ const user_reducer = (state = initialState, action) => {
         };
       }
 
+    //Update recent user status:
+    case actionTypes.UPDATE_RECENT_USER_STATUS:
+      let found1 =
+        state.chatedUsers && state.chatedUsers.length
+          ? !!state.chatedUsers.find((u) => u.id === action.payload.id)
+          : false;
+
+      //if the user is already
+      if (found1) {
+        console.log("update recent user status");
+        return {
+          ...state,
+          chatedUsers: state.chatedUsers.map((userStatus, i) =>
+            userStatus.id === action.payload.id
+              ? { ...userStatus, onlineStatus: action.payload.onlineStatus }
+              : userStatus
+          ),
+        };
+      }
+
     default: {
       return state;
     }

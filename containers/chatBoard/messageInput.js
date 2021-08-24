@@ -31,7 +31,9 @@ const MessageInput = () => {
   const loggedInUserID = useSelector((state) => state.user.currentUser.jid);
   const chatWithID = useSelector((state) => state.user.chatWith.id);
   const chatWithName = useSelector((state) => state.user.chatWith.name);
-
+  const sender = useSelector((state) => state.user.currentUser.username);
+  var text = sender;
+  var loggedInUser = sender && text.split("@")[0];
   const chatCtx = useContext(ChatContext);
   const chats = chatCtx.chats;
   const currentUser = chatCtx.currentUser;
@@ -110,12 +112,14 @@ const MessageInput = () => {
         let messageBody = messageInput;
         console.log("message", messageInput);
         console.log("ids", loggedInUserID, chatWithID);
+        //This object is used to listen for messages
         const newMessage = {
           from: loggedInUserID,
           to: chatWithID,
-          body: messageInput + "&name:" + chatWithName,
+          body: messageInput + "&name:" + loggedInUser,
           type: "chat",
         };
+        //This is used for dispatch
         const sendNewMsg = {
           from: loggedInUserID,
           to: chatWithID,
@@ -123,6 +127,7 @@ const MessageInput = () => {
           type: "chat",
         };
         sendNewMessage(newMessage);
+
         sendNewMsg["messageTime"] = dateTime();
         sendNewMsg["direction"] = "send";
         sendNewMsg["fromto"] = chatWithID;

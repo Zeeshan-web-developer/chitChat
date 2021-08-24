@@ -12,6 +12,7 @@ function chatedUsers() {
     document.querySelectorAll(".chat-main li").forEach((item) => {
       item.classList.remove("active");
     });
+    console.log("current target", e.currentTarget);
     e.currentTarget.classList.add("active");
     document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
   };
@@ -40,14 +41,15 @@ function chatedUsers() {
     <div className="theme-tab">
       <Nav tabs id="myTab1" role="tablist"></Nav>
       <TabContent>
-        <ul className="chat-main">
+        <ul className="chat-main custom-scroll">
           {SotedUsers.map((chatlist, i) => {
             return (
               <li
                 className={`${chatWithID === chatlist.id ? "active" : ""}`}
                 key={i}
+                data-to="blank"
                 onClick={(e) => {
-                  changeChatClick(e, chatlist);
+                  changeChatClick(e);
                   dispatch(
                     setChatWith({
                       name: chatlist.first_name,
@@ -62,7 +64,7 @@ function chatedUsers() {
                   <div
                     className={`profile  ${chatlist.onlineStatus}`}
                     style={{
-                      backgroundImage: `url(${Logo})`,
+                      backgroundImage: `url('assets/images/contact/2.jpg')`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       display: "block",
@@ -82,25 +84,27 @@ function chatedUsers() {
                   <div className="date-status">
                     <i className="ti-pin2" onClick={(e) => Tipin(e)}></i>
                     <h6>{chatlist.lastMessageAt}</h6>
-                    {chatlist.status === "Sending" || "Failed" || "Seen" ? (
+                    {chatlist.onlineStatus === "online" ||
+                    "offline" ||
+                    "busy" ? (
                       <h6
                         className={`${
-                          chatlist.status === "Sending"
+                          chatlist.onlineStatus === "offline"
                             ? "font-dark"
-                            : chatlist.status === "Failed"
+                            : chatlist.onlineStatus === "busy"
                             ? "font-danger"
                             : "font-success"
                         }  status`}
                       >
-                        {chatlist.status === "8" ? "" : chatlist.status}
+                        {chatlist.onlineStatus === "8"
+                          ? ""
+                          : chatlist.onlineStatus}
                       </h6>
                     ) : (
                       ""
                     )}
-                    {chatlist.status === "8" ? (
-                      <div className="badge badge-primary sm">
-                        {chatlist.status}
-                      </div>
+                    {chatlist.onlineStatus === "offline" ? (
+                      <div className="badge badge-primary sm">0</div>
                     ) : (
                       ""
                     )}

@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import ChatContextProvider from "../helpers/chatContext/chatCtx";
 import CustomizerContextProvider from "../helpers/customizerContext/customizerCtx";
 import { useRouter } from "next/router";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor } from "../redux/store/store";
 import store from "../redux/store/store";
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
@@ -18,7 +20,7 @@ export default function MyAppComponent({ Component, pageProps }) {
     // Page Loader
     setTimeout(() => {
       setLoader(false);
-    }, 1500);
+    }, 1000);
   }, []);
 
   return (
@@ -63,12 +65,14 @@ export default function MyAppComponent({ Component, pageProps }) {
       )}
       <div>
         <Provider store={store}>
+          {/* <PersistGate persistor={persistor}> */}
           <CustomizerContextProvider>
             <ChatContextProvider>
               <Component {...pageProps} />
             </ChatContextProvider>
           </CustomizerContextProvider>
           <ToastContainer />
+          {/* </PersistGate> */}
         </Provider>
       </div>
     </Fragment>

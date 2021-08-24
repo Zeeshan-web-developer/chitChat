@@ -8,6 +8,7 @@ import {
   setLastMessage,
   removeRecentUser,
   addNewUSer,
+  updateRecentUserStatus,
 } from "../redux/actions/index";
 let client;
 
@@ -82,12 +83,25 @@ export default function chatClient(username, password) {
           onlineStatus: "offline",
         })
       );
+      console.log("i am unavailable", presence.from.split("/")[0]);
+      store.dispatch(
+        updateRecentUserStatus({
+          id: presence.from.split("/")[0],
+          onlineStatus: "offline",
+        })
+      );
     } else if (!presence.hasOwnProperty("type")) {
       //here we need to update user status that user is online
       console.log("i am available", presence.from);
       store.dispatch(
         updateUserStatus({
           id: presence.from.split("@")[0],
+          onlineStatus: "online",
+        })
+      );
+      store.dispatch(
+        updateRecentUserStatus({
+          id: presence.from.split("/")[0],
           onlineStatus: "online",
         })
       );
@@ -103,6 +117,7 @@ export default function chatClient(username, password) {
 
   //here we listen incoming messages
   client.on("message", (newMessage) => {
+    console.log("on message", newMessage);
     receivedMessage(newMessage);
   });
   return client;
@@ -125,32 +140,26 @@ export const sendNewMessage = (newMessage) => {
 };
 
 const receivedMessage = (newMessage) => {
-  console.log("rec", newMessage);
-  let found = false;
   const recentUsers = store.getState().user.chatedUsers;
-  const usersP = store.getState().user.allusers;
-  console.log("userp", usersP);
-  let filteredUsers =
-    usersP.length > 0 && usersP[0].filter((user) => user.id !== newMessage.to);
-
+  let found = false;
+  console.log("rec", newMessage);
   newMessage["messageTime"] = dateTime();
   newMessage["direction"] = "received";
   newMessage["from"] = newMessage.from.split("/")[0];
   newMessage["fromto"] = newMessage.from;
-  let splitBody = newMessage.body.split("&");
-  newMessage["body"] = splitBody[0];
-  newMessage["first_name"] = splitBody[1].split(":")[1];
-  console.log("after" + newMessage);
+  let splitBody = newMessage && newMessage.body.split("&");
+  newMessage["body"] = splitBody && splitBody[0];
+  if (splitBody.length > 0 && typeof splitBody !== "undefined") {
+    newMessage["first_name"] = splitBody[1].split(":")[1];
+  }
+  //newMessage["first_name"] = splitBody.length > 0 && splitBody !=="undefined" &&splitBody[1].split(":")[1];
   for (var i = 0; i < recentUsers.length; i++) {
     if (recentUsers[i].id === newMessage.from) {
       found = true;
       break;
     }
   }
-  var name =
-    filteredUsers && filteredUsers.find((item) => item.id === newMessage.from);
-  let recivedName = name.first_name;
-  console.log("recived name" + filteredUsers);
+
   if (!found) {
     recentUsers.map((ci) => {
       if (!ci.hasOwnProperty("mesg")) {

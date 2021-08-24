@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { FormGroup, Input } from "reactstrap";
-import dateTime from "./datetime";
 import Logo from "./1.jpg";
 import { Nav, TabContent } from "reactstrap";
 import Avatar from "react-avatar";
+import { Phone, Video } from "react-feather";
 import {
   fetchUsers,
   setChatWith,
@@ -123,12 +123,11 @@ function form() {
     }
   };
 
-  const changeChatClick = (e) => {
-    document.querySelectorAll(".chat-main li").forEach((item) => {
+  const contactLogMain = (e) => {
+    document.querySelectorAll(".contact-log-main li").forEach((item) => {
       item.classList.remove("active");
     });
     e.currentTarget.classList.add("active");
-    document.querySelector(".sidebar-toggle").classList.add("mobile-menu");
   };
 
   //This is used to send frind request ,it sends xmpp mesage if any user is not in our roster
@@ -183,10 +182,10 @@ function form() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </FormGroup>
-          <div className="theme-tab">
+          <div className="theme-tab tab-icon">
             <Nav tabs id="myTab1" role="tablist"></Nav>
             <TabContent activeTab={chatSubTab}>
-              <ul className="chat-main">
+              <ul className="contact-log-main">
                 {onlineusers
                   .filter((data) => {
                     if (searchTerm == null) {
@@ -211,7 +210,7 @@ function form() {
                         }`}
                         key={i}
                         onClick={(e) => {
-                          changeChatClick(e, chatlist);
+                          contactLogMain(e);
                           dispatch(
                             setChatWith({
                               name: chatlist.first_name,
@@ -225,7 +224,7 @@ function form() {
                           addToRoster(chatlist);
                         }}
                       >
-                        <div className="chat-box">
+                        <div className="contact-box">
                           <div
                             className={`profile ${chatlist.onlineStatus}`}
                             style={{
@@ -235,57 +234,25 @@ function form() {
                               display: "block",
                             }}
                           >
-                            {/* <img
+                            <img
                               className="bg-img"
                               src={Logo}
                               alt="Avatar"
                               style={{ display: "none" }}
-                            /> */}
-                            {/* <Avatar
-                              className={`profile ${chatlist.onlineStatus}`}
-                              style={{ display: "none" }}
-                              name={chatlist.first_name}
-                              size={45}
-                              rounded={true}
-                            /> */}
+                            />
                           </div>
 
                           <div className="details">
                             <h5>{chatlist.first_name}</h5>
-                            {/* <h6>{chatlist.mesg}</h6> */}
+                            <h6>+21 3523 25544 </h6>
                           </div>
-                          <div className="date-status">
-                            <i
-                              className="ti-pin2"
-                              onClick={(e) => Tipin(e)}
-                            ></i>
-                            <h6 className="font-success status">
-                              {chatlist.onlineStatus}
-                            </h6>
-                            {/* {chatlist.status === "Sending" ||
-                            "Failed" ||
-                            "Seen" ? (
-                              <h6
-                                className={`${
-                                  chatlist.status === "Sending"
-                                    ? "font-dark"
-                                    : chatlist.status === "Failed"
-                                    ? "font-danger"
-                                    : "font-success"
-                                }  status`}
-                              >
-                                {chatlist.status === "8" ? "" : chatlist.status}
-                              </h6>
-                            ) : (
-                              ""
-                            )} */}
-                            {/* {chatlist.status === "8" ? (
-                              <div className="badge badge-primary sm">
-                                {chatlist.status}
-                              </div>
-                            ) : (
-                              ""
-                            )} */}
+                          <div className="contact-action">
+                            <div className="icon-btn btn-outline-primary btn-sm button-effect">
+                              <Phone />
+                            </div>
+                            <div className="icon-btn btn-outline-success btn-sm button-effect">
+                              <Video />
+                            </div>
                           </div>
                         </div>
                       </li>

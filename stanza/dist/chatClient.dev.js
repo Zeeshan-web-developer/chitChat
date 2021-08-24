@@ -108,6 +108,7 @@ function chatClient(username, password) {
   //here we listen incoming messages
 
   client.on("message", function (newMessage) {
+    console.log("on message", newMessage);
     receivedMessage(newMessage);
   });
   return client;
@@ -150,25 +151,17 @@ var sendNewMessage = function sendNewMessage(newMessage) {
 exports.sendNewMessage = sendNewMessage;
 
 var receivedMessage = function receivedMessage(newMessage) {
-  console.log("rec", newMessage);
-  var found = false;
-
   var recentUsers = _store["default"].getState().user.chatedUsers;
 
-  var usersP = _store["default"].getState().user.allusers;
-
-  console.log("userp", usersP);
-  var filteredUsers = usersP.length > 0 && usersP[0].filter(function (user) {
-    return user.id !== newMessage.to;
-  });
+  var found = false;
+  console.log("rec", newMessage);
   newMessage["messageTime"] = (0, _datetime["default"])();
   newMessage["direction"] = "received";
   newMessage["from"] = newMessage.from.split("/")[0];
   newMessage["fromto"] = newMessage.from;
-  var splitBody = newMessage.body.split("&");
-  newMessage["body"] = splitBody[0];
-  newMessage["first_name"] = splitBody[1].split(":")[1];
-  console.log("after" + newMessage);
+  var splitBody = newMessage && newMessage.body.split("&");
+  newMessage["body"] = splitBody && splitBody[0];
+  newMessage["first_name"] = splitBody.length > 0 && splitBody[1].split(":")[1];
 
   for (var i = 0; i < recentUsers.length; i++) {
     if (recentUsers[i].id === newMessage.from) {
@@ -176,12 +169,6 @@ var receivedMessage = function receivedMessage(newMessage) {
       break;
     }
   }
-
-  var name = filteredUsers && filteredUsers.find(function (item) {
-    return item.id === newMessage.from;
-  });
-  var recivedName = name.first_name;
-  console.log("recived name" + filteredUsers);
 
   if (!found) {
     recentUsers.map(function (ci) {

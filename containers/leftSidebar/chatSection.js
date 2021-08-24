@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import ContactSearch from "./contactSearch";
 import ChatedUsers from "./chatedUsers";
+import Calls from "./calls";
 import { useDispatch, useSelector } from "react-redux";
-import { MessageSquare, UserPlus, Phone } from "react-feather";
+import { MessageSquare, UserPlus, Phone, Search, Plus } from "react-feather";
 import { Nav, NavLink, NavItem, TabContent, TabPane } from "reactstrap";
 import {
   setActiveTab,
@@ -13,6 +14,8 @@ import {
 import { getRosterItems } from "../../stanza/chatClient";
 
 const ChatSection = () => {
+  const [searchToggle, setSearchToggle] = useState(false);
+  const [ChatContact, setChatContact] = useState(false);
   const dispatch = useDispatch();
   const atab = useSelector((state) => state.user.activeTab);
   const jid = useSelector((state) => state.user.currentUser.jid);
@@ -41,7 +44,40 @@ const ChatSection = () => {
             <h2>Chat</h2>
             <h4>Start New Conversation</h4>
           </div>
-          <div className="media-body text-right"></div>
+          <div className="media-body text-right">
+            <a
+              className="icon-btn btn-outline-light btn-sm search contact-search"
+              href="#"
+              onClick={() => setSearchToggle(true)}
+            >
+              {" "}
+              <Search />
+            </a>
+            <form
+              className={`form-inline search-form ${
+                searchToggle ? "open" : ""
+              }`}
+            >
+              <div className="form-group">
+                <input
+                  className="form-control-plaintext"
+                  type="search"
+                  placeholder="Search.."
+                />
+                <div
+                  className="icon-close close-search"
+                  onClick={() => setSearchToggle(false)}
+                ></div>
+              </div>
+            </form>
+            <a
+              className="icon-btn btn-primary btn-fix chat-cont-toggle outside"
+              href="#"
+              onClick={() => setChatContact(!ChatContact)}
+            >
+              <Plus />
+            </a>
+          </div>
         </div>
       </div>
       <div className="theme-tab tab-sm chat-tabs logo-warpper">
@@ -106,7 +142,7 @@ const ChatSection = () => {
             role="tabpanel"
             aria-labelledby="chat-tab"
           >
-            <ChatedUsers />
+            <Calls />
           </TabPane>
 
           <TabPane
