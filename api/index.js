@@ -9,6 +9,6 @@ export const fetchChatApi = () => {
 };
 
 export const instance = axios.create({
-  baseURL: "https://karthik.mysmartpbx.org:8443/v2/",
+  baseURL: "https://,
 });
 export default instance;
